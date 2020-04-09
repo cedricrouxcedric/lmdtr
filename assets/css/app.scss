@@ -1,3 +1,5 @@
-body {
-    background-color: purple;
+@import "~bootstrap/scss/bootstrap";
+
+.bg-primary {
+  background-color: red !important;
 }
