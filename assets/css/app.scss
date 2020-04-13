@@ -1,5 +1,23 @@
 @import "~bootstrap/scss/bootstrap";
 
-.bg-primary {
-  background-color: red !important;
+.site-heading .site-heading-upper {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.site-heading .site-heading-lower {
+  font-size: 5rem;
+  font-weight: 100;
+  line-height: 4rem;
+}
+
+.page-section {
+  max-width: 1200px;
+  top: 0px;
+  z-index: -1;
+}
+
+.nav-item {
+  color: #5eb5e0;
 }

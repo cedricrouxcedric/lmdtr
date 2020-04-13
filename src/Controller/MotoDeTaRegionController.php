@@ -16,7 +16,24 @@ class MotoDeTaRegionController extends AbstractController
     public function index() :Response
     {
         return $this->render('lmdtr/index.html.twig', [
-            'website' => 'LMDTR' ,
+            'website' => 'Les motards de ta région' ,
+        ]);
+    }
+
+    /**
+     * @Route("/lmdtr/test/{slug<^[a-z0-9-]+$>}", defaults={"slug" = null}, name="lmdtr_test_slug")
+     * @return Response
+     */
+    public function testSlug(string $slug) :Response
+    {
+        if (!$slug) {
+        throw $this
+            ->createNotFoundException('No slug has been sent to find a program in program\'s table.');
+        }
+
+
+            return $this->render('lmdtr/testslug.html.twig', [
+                'slug' => $slug,
         ]);
     }
 }

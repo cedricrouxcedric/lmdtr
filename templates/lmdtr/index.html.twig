@@ -1,5 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ website }} index</h1>
+    <div class="container">
+        <h1 class="site-heading text-center d-none d-lg-block">
+            <p class="site-heading-upper text-primary mb-3">
+                Achète vends ou parle de moto avec</p>
+            <span class="site-heading-lower">{{ website }}</span>
+        </h1>
+        {% include 'navbar.html.twig' %}
+        <div>
+            <section class="page-section clearfix ">
+                <img class="img-fluid mb-3 mb-lg-0 rounded" src="{{ asset('img/moto-picture.jpg') }}" alt="banniere">
+            </section>
+        </div>
+    </div>
 {% endblock %}
