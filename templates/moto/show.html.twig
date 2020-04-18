@@ -4,7 +4,9 @@
 
 {% block body %}
     <h1>Moto</h1>
-
+    {% if moto.filename %}
+        <img src="/images/motos/{{ moto.filename }}" alt="photo-moto">
+    {% endif %}
     <table class="table">
         <tbody>
             <tr>
