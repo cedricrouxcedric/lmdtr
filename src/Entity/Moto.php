@@ -24,6 +24,7 @@ class Moto
     /**
      * @var string|null
      * @ORM\Column(type="string", length=255)
+     *
      */
     private $filename;
 
@@ -42,6 +43,27 @@ class Moto
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="motos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categorie;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $year;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $kilometrage;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $a2;
 
     public function getId(): ?int
     {
@@ -106,6 +128,54 @@ class Moto
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): self
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): self
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getKilometrage(): ?int
+    {
+        return $this->kilometrage;
+    }
+
+    public function setKilometrage(int $kilometrage): self
+    {
+        $this->kilometrage = $kilometrage;
+
+        return $this;
+    }
+
+    public function getA2(): ?bool
+    {
+        return $this->a2;
+    }
+
+    public function setA2(bool $a2): self
+    {
+        $this->a2 = $a2;
 
         return $this;
     }

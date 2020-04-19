@@ -1,37 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Moto index{% endblock %}
-
 {% block body %}
     <h1>Moto index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Filename</th>
-                <th>Prix</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row">
         {% for moto in motos %}
-            <tr>
-                <td>{{ moto.id }}</td>
-                <td>{{ moto.filename }}</td>
-                <td>{{ moto.prix }}</td>
-                <td>
-                    <a href="{{ path('moto_show', {'id': moto.id}) }}">show</a>
-                    <a href="{{ path('moto_edit', {'id': moto.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="col-4">
+                <div class="card mb-4">
+                    {% if moto.filename %}
+                        <img src="{{ vich_uploader_asset(moto,'imageFile') | imagine_filter('thumb') }}"
+                             alt="card-img-top">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ moto.filename }}
+                        </h5>
+                        <p class="card-text">{{ moto.categorie.name }} . {{ moto.prix }}</p>
+                        <div class="row text-center">
+                            <a class="col-6 " href="{{ path('moto_show', {'id': moto.id}) }}">show</a>
+                            <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">edit</a>
+                        </div>
+                    </div>
 
-    <a href="{{ path('moto_new') }}">Create new</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <a href="{{ path('moto_new') }}">Create new</a>
+    </div>
 {% endblock %}

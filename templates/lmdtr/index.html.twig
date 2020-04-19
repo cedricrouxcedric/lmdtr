@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <h1 class="site-heading text-center d-none d-lg-block">
-            <p class="site-heading-upper text-primary mb-3">
+    <div class="container"></div>
+    <div class=" jumbotron text-center">
+        {% include 'navbar.html.twig' %}
+        <h1 class="site-heading text-center d-lg-block">
+            <p class="site-heading-upper my-3">
                 Achète vends ou parle de moto avec</p>
             <span class="site-heading-lower">{{ website }}</span>
         </h1>
-        {% include 'navbar.html.twig' %}
+
         <div>
-            <section class="page-section clearfix ">
-                <img class="img-fluid mb-3 mb-lg-0 rounded" src="{{ asset('img/moto-picture.jpg') }}" alt="banniere">
-            </section>
+            <div class="h-75">
+                <section class="page-section clearfix ">
+                    <img class="img-fluid mb-3 mb-0 rounded" src="{{ asset('img/moto-picture.jpg') }}"
+                         alt="image acceuil" width="100%" height="auto">
+                </section>
+            </div>
         </div>
     </div>
 {% endblock %}

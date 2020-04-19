@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Categorie;
 use App\Entity\Moto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class MotoType extends AbstractType
 {
@@ -15,9 +17,11 @@ class MotoType extends AbstractType
         $builder
             ->add('filename')
             ->add('prix')
+            ->add('year')
+            ->add('kilometrage')
             ->add('imageFile',FileType::class , [
-                'required' => false
-            ])
+                'required' => false])
+            ->add('categorie',null,['choice_label' => 'name'])
         ;
     }
 

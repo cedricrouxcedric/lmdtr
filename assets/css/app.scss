@@ -1,5 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
 
+body {
+  max-width: 1200px !important;
+}
+
 .site-heading .site-heading-upper {
   display: block;
   font-size: 2rem;
@@ -13,11 +17,14 @@
 }
 
 .page-section {
-  max-width: 1200px;
   top: 0px;
   z-index: -1;
 }
 
 .nav-item {
   color: #5eb5e0;
+}
+
+.space {
+  height: 15px;
 }
