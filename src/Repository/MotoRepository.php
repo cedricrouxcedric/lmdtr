@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Moto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,24 @@ class MotoRepository extends ServiceEntityRepository
         parent::__construct($registry, Moto::class);
     }
 
+    public function findAllStillOnSale() {
+        return $this->findAllStillOnSaleQuerry()
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllAlreadySale() {
+        return $this->createQueryBuilder('m')
+            ->where('m.sold = true')
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function findAllStillOnSaleQuerry(): QueryBuilder
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.sold = false');
+    }
     // /**
     //  * @return Moto[] Returns an array of Moto objects
     //  */

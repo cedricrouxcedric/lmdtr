@@ -13,15 +13,52 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/moto")
  */
+
 class MotoController extends AbstractController
 {
+
+
+    /**
+     * @var MotoRepository
+     */
+    private $repository;
+
+    public function __construct(MotoRepository $repository)
+    {
+        $this->MotoRepository = $repository;
+    }
+
+
     /**
      * @Route("/", name="moto_index", methods={"GET"})
      */
-    public function index(MotoRepository $motoRepository): Response
+    public function index(): Response
     {
+        $motos = $this->MotoRepository->findAll();
         return $this->render('moto/index.html.twig', [
-            'motos' => $motoRepository->findAll(),
+            'motos' => $motos,
+        ]);
+    }
+
+    /**
+     * @Route("/disponible", name="moto_disponible", methods={"GET"})
+     */
+    public function stillOnSale(): Response
+    {
+        $motos = $this->MotoRepository->findAllStillOnSale();
+        return $this->render('moto/index.html.twig', [
+            'motos' => $motos,
+        ]);
+    }
+
+    /**
+     * @Route("/vendue", name="moto_vendue", methods={"GET"})
+     */
+    public function alreadySale(): Response
+    {
+        $motos = $this->MotoRepository->findAllAlreadySale();
+        return $this->render('moto/index.html.twig', [
+            'motos' => $motos,
         ]);
     }
 
@@ -33,7 +70,6 @@ class MotoController extends AbstractController
         $moto = new Moto();
         $form = $this->createForm(MotoType::class, $moto);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($moto);

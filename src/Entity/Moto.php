@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Component\HttpFoundation\File\File;
@@ -61,9 +63,20 @@ class Moto
     private $kilometrage;
 
     /**
-     * @ORM\Column(type="boolean", options={"default": false})
+     * @ORM\Column(type="boolean")
      */
-    private $a2;
+    private $a2 = true ;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Marque", inversedBy="moto")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $marque;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $sold = false;
 
     public function getId(): ?int
     {
@@ -73,6 +86,11 @@ class Moto
     public function getPrix(): ?int
     {
         return $this->prix;
+    }
+
+    public function getFormattedPrix (): string
+    {
+        return number_format($this->prix, 0, '',' ');
     }
 
     /**
@@ -93,6 +111,7 @@ class Moto
 
     /**
      * @param string|null $filename
+     * @return Void
      */
     public function setFilename(?string $filename): Void
     {
@@ -101,12 +120,13 @@ class Moto
 
     /**
      * @param File|null $imageFile
+     * @return Void
      */
     public function setImageFile(?File $imageFile): Void
     {
         $this->imageFile = $imageFile;
         if($this->imageFile instanceof UploadedFile) {
-            $this->updated_at = new \DateTime('now');
+            $this->updated_at = new DateTime('now');
         }
     }
 
@@ -120,12 +140,12 @@ class Moto
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    public function setUpdatedAt(DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
 
@@ -176,6 +196,30 @@ class Moto
     public function setA2(bool $a2): self
     {
         $this->a2 = $a2;
+
+        return $this;
+    }
+
+    public function getMarque(): ?Marque
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(?Marque $marque): self
+    {
+        $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getSold(): ?bool
+    {
+        return $this->sold;
+    }
+
+    public function setSold(bool $sold): self
+    {
+        $this->sold = $sold;
 
         return $this;
     }

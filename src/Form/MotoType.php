@@ -22,6 +22,7 @@ class MotoType extends AbstractType
             ->add('imageFile',FileType::class , [
                 'required' => false])
             ->add('categorie',null,['choice_label' => 'name'])
+            ->add('marque',null,['choice_label' => 'name'])
         ;
     }
 
