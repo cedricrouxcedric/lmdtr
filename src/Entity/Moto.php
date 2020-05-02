@@ -78,6 +78,16 @@ class Moto
      */
     private $sold = false;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $din;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $fisc;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -224,4 +234,35 @@ class Moto
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDin()
+    {
+        return $this->din;
+    }
+
+    /**
+     * @param mixed $din
+     */
+    public function setDin($din): void
+    {
+        $this->din = $din;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFisc()
+    {
+        return $this->fisc;
+    }
+
+    /**
+     * @param mixed $fisc
+     */
+    public function setFisc($fisc): void
+    {
+        $this->fisc = $fisc;
+    }
 }
