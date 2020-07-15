@@ -15,14 +15,20 @@ class MotoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('filename')
             ->add('prix')
-            ->add('year')
+            ->add('year',null,['label' => 'Année'])
             ->add('kilometrage')
-            ->add('imageFile',FileType::class , [
-                'required' => false])
+            ->add('din',null,['label' => 'puissance'])
+            ->add('fisc',null,['label' => 'puissance fiscal' ])
             ->add('categorie',null,['choice_label' => 'name'])
             ->add('marque',null,['choice_label' => 'name'])
+            // Ajout du champ "IMAGES" au formulaire n'etant pas lié a la bdd (mapped false)
+            ->add('images', FileType::class, [
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
+            ])
         ;
     }
 

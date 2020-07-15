@@ -7,13 +7,13 @@
         {% for moto in motos %}
             <div class="col-4">
                 <div class="card mb-4">
-                    {% if moto.filename %}
-                        <img src="{{ vich_uploader_asset(moto,'imageFile') | imagine_filter('thumb') }}"
-                             alt="card-img-top">
-                    {% endif %}
+{#                    {% if moto.filename %}#}
+{#                        <img src=" assets/img/moto-picture.jpg "#}
+{#                             alt="card-img-top">#}
+{#                    {% endif %}#}
                     <div class="card-body">
                         <h5 class="card-title">
-                            {{ moto.filename }}
+{#                            {{ moto.filename }}#}
                         </h5>
                         <p class="card-text">{{ moto.categorie.name }} . {{ moto.prix }}</p>
                         <div class="row text-center">

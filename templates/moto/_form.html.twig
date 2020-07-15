@@ -1,5 +1,19 @@
 {{ form_start(form) }}
-    {{ form_row(form.imageFile) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{% if app.request.attributes.get('_route') == 'moto_edit' %}
+    <div class="row">
+        <h2 class="col-12">Images</h2>
+        {% for image in moto.images %}
+            <div>
+            <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+            <a href="{{ path('moto_delete_image', {'id' : image.id}) }}"
+               data-delete
+               data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

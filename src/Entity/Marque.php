@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MarqueRepository")
@@ -20,6 +21,8 @@ class Marque
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
+     * @Assert\Length(max="100", maxMessage="Le nom saisie {{ value }} est trop long")
      */
     private $name;
 

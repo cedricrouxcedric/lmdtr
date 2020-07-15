@@ -4,15 +4,17 @@ namespace App\Entity;
 
 use DateTime;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Void_;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MotoRepository")
- * @Vich\Uploadable()
+ *
  */
 class Moto
 {
@@ -24,52 +26,40 @@ class Moto
     private $id;
 
     /**
-     * @var string|null
-     * @ORM\Column(type="string", length=255)
-     *
-     */
-    private $filename;
-
-    /**
-     * @var File|null
-     * @Vich\UploadableField(mapping="moto_image", fileNameProperty="filename")
-     */
-    private $imageFile;
-
-    /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
+     * @Assert\Length(max="100", maxMessage="Le nom saisie {{ value }} est trop long")
      */
     private $prix;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $updated_at;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="motos")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
      */
     private $categorie;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
      */
     private $year;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
      */
     private $kilometrage;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $a2 = true ;
+    private $a2 = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Marque", inversedBy="moto")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Ne peut pas etre vide")
      */
     private $marque;
 
@@ -88,6 +78,16 @@ class Moto
      */
     private $fisc;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="moto", orphanRemoval=true, cascade={"persist"})
+     */
+    private $images;
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,67 +98,18 @@ class Moto
         return $this->prix;
     }
 
-    public function getFormattedPrix (): string
+    public function getFormattedPrix(): string
     {
-        return number_format($this->prix, 0, '',' ');
+        return number_format($this->prix, 0, '', ' ');
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    /**
-     * @return File|null
-     */
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param string|null $filename
-     * @return Void
-     */
-    public function setFilename(?string $filename): Void
-    {
-        $this->filename = $filename;
-    }
-
-    /**
-     * @param File|null $imageFile
-     * @return Void
-     */
-    public function setImageFile(?File $imageFile): Void
-    {
-        $this->imageFile = $imageFile;
-        if($this->imageFile instanceof UploadedFile) {
-            $this->updated_at = new DateTime('now');
-        }
-    }
-
-    /**
+     /**
      * @param int $prix
      * @return $this
      */
     public function setPrix(int $prix): self
     {
         $this->prix = $prix;
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
         return $this;
     }
 
@@ -264,5 +215,36 @@ class Moto
     public function setFisc($fisc): void
     {
         $this->fisc = $fisc;
+    }
+
+    /**
+     * @return Collection|Images[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setMoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getMoto() === $this) {
+                $image->setMoto(null);
+            }
+        }
+
+        return $this;
     }
 }
