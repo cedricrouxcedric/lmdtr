@@ -1,6 +1,13 @@
 $(function () {
+    function removeAlert(){
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 4000);
+    }
+    removeAlert();
     let $links = $("a[data-delete]");
-    console.log('ready');
     $links.on("click", function (e) {
             // Suppresion de la redirection vers le href du lien
             e.preventDefault();
@@ -20,6 +27,8 @@ $(function () {
                 ).then(data => {
                     if (data.success) {
                         this.parentElement.remove();
+                        $( ".here" ).prepend( "<div class='alert alert-success'>Photo supprimée</div>" );
+                        removeAlert();
                     } else {
                         console.log(data.error);
                     }
@@ -27,4 +36,5 @@ $(function () {
             }
         }
     )
+
 })

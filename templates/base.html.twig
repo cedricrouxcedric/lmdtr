@@ -7,18 +7,36 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
+
     <body class="container">
     {% block nav %}
-
+    <div class="here"></div>
     {% endblock %}
+    {% for message in app.flashes('success') %}
+
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+
+    {% endfor %}
 
         {% block body %}
-
         {% endblock %}
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
             <script src="{{ asset('js/images.js') }}"></script>
         {% endblock %}
+
     </body>
+
 </html>

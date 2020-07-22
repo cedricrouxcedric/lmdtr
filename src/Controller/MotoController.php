@@ -6,7 +6,6 @@ use App\Entity\Images;
 use App\Entity\Moto;
 use App\Form\MotoType;
 use App\Repository\MotoRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +34,34 @@ class MotoController extends AbstractController
 
     }
 
+    private function checkExt($repo)
+    {
+        $allowedExt = ["jpeg", "jpg", "png"];
+        $result = true;
+        foreach ($repo as $file) {
+            if (!in_array($file->guessExtension(), $allowedExt)) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+
+    private function uploadImg($image, $moto = null)
+    {
+        if (!isset($moto)) {
+            $moto = new Moto();
+        }
+        $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+        // Copie du fichier dans le dossier Uploads
+        $image->move(
+            $this->getParameter('images_directory'),
+            $fichier
+        );
+        // Stockage de l'image dans la base de données (son nom)
+        $img = new Images();
+        $img->setName($fichier);
+        $moto->addImage($img);
+    }
 
     /**
      * @Route("/moto", name="moto_index", methods={"GET"})
@@ -68,7 +95,8 @@ class MotoController extends AbstractController
             'motos' => $motos,
         ]);
     }
- //TODO utiliser le em du constructeur
+    //TODO utiliser le em du constructeur
+
     /**
      * @Route("/moto/new", name="moto_new", methods={"GET","POST"})
      */
@@ -80,25 +108,19 @@ class MotoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Récuperation des images transmises
             $images = $form->get('images')->getData();
-            // On boucle sur les images
-            foreach ($images as $image) {
-                // Generation d'un new nom de fichier
-                $fichier = md5(uniqid()).'.'.$image->guessExtension();
-                // Copie du fichier dans le dossier Uploads
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $fichier
-                );
-                // Stockage de l'image dans la base de données (son nom)
-                $img = new Images();
-                $img->setName($fichier);
-                $moto->addImage($img);
-            }
+            if ($this->checkExt($images)) {
+                // On boucle sur les images
+                foreach ($images as $image) {
+                    $this->uploadImg($image);
+                }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($moto);
-            $entityManager->flush();
-            return $this->redirectToRoute('moto_index');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($moto);
+                $entityManager->flush();
+                $this->addFlash('success', 'Annonce Ajoutée sur le site');
+                return $this->redirectToRoute('moto_index');
+            }
+            $this->addFlash('error', "Les photos ne respectent pas le format requis");
         }
         return $this->render('moto/new.html.twig', [
             'moto' => $moto,
@@ -125,23 +147,18 @@ class MotoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-                // Récuperation des images transmises
-                $images = $form->get('images')->getData();
+            // Récuperation des images transmises
+            $images = $form->get('images')->getData();
+            if ($this->checkExt($images)) {
                 // On boucle sur les images
                 foreach ($images as $image) {
-                    // Generation d'un new nom de fichier
-                    $fichier = md5(uniqid()).'.'.$image->guessExtension();
-                    // Copie du fichier dans le dossier Uploads
-                    $image->move(
-                        $this->getParameter('images_directory'),
-                        $fichier
-                    );
-                    // Stockage de l'image dans la base de données (son nom)
-                    $img = new Images();
-                    $img->setName($fichier);
-                    $moto->addImage($img);
+                    $this->uploadImg($image, $moto);
                 }
-            $this->getDoctrine()->getManager()->flush();
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Annonce modifiée');
+            } else {
+                $this->addFlash('error', "Les photos ne respectent pas le format requis");
+            }
         }
 
         return $this->render('moto/edit.html.twig', [
@@ -155,7 +172,7 @@ class MotoController extends AbstractController
      */
     public function delete(Request $request, Moto $moto): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$moto->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $moto->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($moto);
             $entityManager->flush();
@@ -169,22 +186,22 @@ class MotoController extends AbstractController
      */
     public function deleteImage(Images $image,
                                 Request $request,
-                                EntityManagerInterface $em) {
+                                EntityManagerInterface $em)
+    {
         $data = json_decode($request->getContent(), true);
 
         // Verification si le token est valide
-        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
             $nom = $image->getName();
-            unlink($this->getParameter('images_directory').'/'.$nom);
+            unlink($this->getParameter('images_directory') . '/' . $nom);
 
             $em = $this->getDoctrine()->getManager();
             $em->remove($image);
             $em->flush();
-
             // Recuperation de la reponse en JSON
-            return new JsonResponse(['success'=> true]);
+            return new JsonResponse(['success' => true]);
         } else {
-            return new JsonResponse(['error'=> 'Token Invalide'], 400);
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
         }
     }
 }

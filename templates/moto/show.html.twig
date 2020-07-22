@@ -3,21 +3,36 @@
 {% block title %}Moto{% endblock %}
 
 {% block body %}
-    <div class="jumbotron pt-3">
+    <div class="jumbotron px-5 pt-3">
         <div class="container">
-            <h1 class="text-center">Moto</h1>
+            <h1 class="text-center">{{ moto.marque.name }}  {{ moto.model }}</h1>
             <div class="rown justify-content-center">
                 <div class="col-12 text-center">
                     <div class="">
-{#                    {% if moto.filename %}#}
-{#                        <img src="{{ asset(moto,'imageFile') | imagine_filter('thumb') }}"#}
-{#                    {% endif %}#}
+                        {% if moto.images %}
+                            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% for image in moto.images %}
+                                    <div class="carousel-item {{ loop.first ? 'active' : ' ' }}">
+                                        <img class="d-block w-75 m-auto"  src="{{ asset('/uploads/' ~ image.name)| imagine_filter('thumb') }}" alt="Image">
+                                    </div>
+                                   {% endfor %}
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-md-8">
-{#                    <h1 class="text-center text-danger">{{ moto.filename }}</h1>#}
-                    <h2>{{ moto.marque.name }}</h2>
-                    <p> model de la moto</p>
+                <div class="">
+                    <h2 class="text-center"></h2>
+                    <h2 class="text-center"> </h2>
                 </div>
             </div>
         </div>
@@ -39,20 +54,20 @@
                 </tr>
                 <tr>
                     <td>Puissance din/fical</td>
-                    <td>{{ moto.din }}/{{ moto.fisc }}</td>
+                    <td>{{ moto.din }} / {{ moto.fisc }}</td>
                 </tr>
             </table>
         </div>
     </div>
-    <div class="text-primary pt-0 text-right" style="font-size: 3rem; font-weight: bold">{{ moto.formattedPrix }}€</div>
+    <div class="text-primary pt-0 text-right" style="font-size: 3rem; font-weight: bold">{{ moto.formattedPrice }}</div>
         <a href="#" class="btn btn-primary ">Contacter le vendeur</a>
     <div class="col-12 ">
         <div class="row">
             <div class="col-6 ">
-                <a href="{{ path('moto_index') }}">back to liste</a>
+                <a href="{{ path('moto_index') }}">Retourner à liste des motos d'occasion</a>
             </div>
             <div class="col-6 text-center">
-                <a href="{{ path('moto_edit', {'id': moto.id}) }}">edit</a>
+                <a href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
             </div>
         </div>
     </div>

@@ -62,6 +62,10 @@ class Moto
      * @Assert\NotBlank(message="Ne peut pas etre vide")
      */
     private $marque;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $model;
 
     /**
      * @ORM\Column(type="boolean")
@@ -98,9 +102,9 @@ class Moto
         return $this->prix;
     }
 
-    public function getFormattedPrix(): string
+    public function getFormattedPrice(): string
     {
-        return number_format($this->prix, 0, '', ' ');
+        return number_format($this->prix, 0, '', ' ')." €";
     }
 
      /**
@@ -171,6 +175,22 @@ class Moto
         $this->marque = $marque;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param mixed $model
+     */
+    public function setModel($model): void
+    {
+        $this->model = $model;
     }
 
     public function getSold(): ?bool

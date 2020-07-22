@@ -2,6 +2,7 @@
 
 body {
   max-width: 1200px !important;
+  background-color: #AAAAAA;
 }
 
 .site-heading .site-heading-upper {
@@ -27,4 +28,20 @@ body {
 
 .space {
   height: 15px;
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.card {
+  background-color: #AAAABB;
+}
+
+
+.img-moto {
+  max-height: 235px;
 }

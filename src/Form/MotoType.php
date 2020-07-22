@@ -22,6 +22,7 @@ class MotoType extends AbstractType
             ->add('fisc',null,['label' => 'puissance fiscal' ])
             ->add('categorie',null,['choice_label' => 'name'])
             ->add('marque',null,['choice_label' => 'name'])
+            ->add('model')
             // Ajout du champ "IMAGES" au formulaire n'etant pas lié a la bdd (mapped false)
             ->add('images', FileType::class, [
                 'label' => false,

@@ -1,24 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Moto index{% endblock %}
+{% block title %}Motos occasion{% endblock %}
 {% block body %}
-    <h1>Moto index</h1>
+    <h1>Moto occasion</h1>
     <div class="row">
         {% for moto in motos %}
             <div class="col-4">
                 <div class="card mb-4">
-{#                    {% if moto.filename %}#}
-{#                        <img src=" assets/img/moto-picture.jpg "#}
-{#                             alt="card-img-top">#}
-{#                    {% endif %}#}
+                    {% if moto.images %}
+                        <div>
+                            <img  class="card-img img-moto"  src="{{ asset('/uploads/' ~ moto.images|first.name)| imagine_filter('thumb') }}" alt="Image">
+                        </div>
+                    {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">
-{#                            {{ moto.filename }}#}
+                        <h5 class="card-title text-center">
+                           {{ moto.marque.name }} - {{ moto.model }} - {{ moto.year }}
                         </h5>
-                        <p class="card-text">{{ moto.categorie.name }} . {{ moto.prix }}</p>
+                        <p class="card-text text-center">{{ moto.FormattedPrice }}</p>
                         <div class="row text-center">
-                            <a class="col-6 " href="{{ path('moto_show', {'id': moto.id}) }}">show</a>
-                            <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">edit</a>
+                            <a class="col-6 " href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a>
+                            <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
                         </div>
                     </div>
 
@@ -27,6 +28,6 @@
         {% endfor %}
     </div>
     <div class="row">
-        <a href="{{ path('moto_new') }}">Create new</a>
+        <a href="{{ path('moto_new') }}">Créer une annonce.</a>
     </div>
 {% endblock %}
