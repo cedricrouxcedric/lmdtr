@@ -26,6 +26,7 @@ $(function () {
                     response => response.json()
                 ).then(data => {
                     if (data.success) {
+                        $('img'+ this).remove();
                         this.parentElement.remove();
                         $( ".here" ).prepend( "<div class='alert alert-success'>Photo supprimée</div>" );
                         removeAlert();

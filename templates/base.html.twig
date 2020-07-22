@@ -10,6 +10,7 @@
 
     <body class="container">
     {% block nav %}
+        {% include 'navbar.html.twig' %}
     <div class="here"></div>
     {% endblock %}
     {% for message in app.flashes('success') %}

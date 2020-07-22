@@ -45,3 +45,8 @@ body {
 .img-moto {
   max-height: 235px;
 }
+
+.column {
+  display: flex;
+  flex-direction: column-reverse;
+}

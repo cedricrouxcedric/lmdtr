@@ -7,14 +7,17 @@
         <div class="row">
             <h2 class="col-12">Images</h2>
             {% for image in moto.images %}
-                <div class="mx-2">
 
-                    <img class="pb-2" src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
-                    <div>
-                        <a href="{{ path('moto_delete_image', {'id' : image.id}) }}"
+                    <div class="mx-2 column ">
+                        <a class="px-3 column "
+                           href="{{ path('moto_delete_image', {'id' : image.id}) }}"
                            data-delete
-                           data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer la photo</a>
-                    </div>
+                           data-need="{{ moto.id }}"
+                           data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer la photo
+                            <img title="img{{ image.id }}"
+                                 class="pt-3" src="{{ asset('/uploads/' ~ image.name) }}"
+                                 alt="Image" width="150">
+                        </a>
                 </div>
             {% endfor %}
         </div>
