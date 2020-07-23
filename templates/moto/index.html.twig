@@ -30,4 +30,8 @@
     <div class="row">
         <a href="{{ path('moto_new') }}">Créer une annonce.</a>
     </div>
+    <div class="navigation">
+        {{ knp_pagination_render(motos) }}
+    </div>
+
 {% endblock %}

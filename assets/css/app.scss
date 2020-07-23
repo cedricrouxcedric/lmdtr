@@ -52,7 +52,24 @@ body {
 }
 
 a {
-  .btn{
+  .btn {
     color: white;
   }
+}
+
+
+.pagination .page {
+  margin-inline: 0.5rem;
+}
+
+.pagination .current {
+  margin-inline: 1rem;
+}
+
+.pagination .first {
+  margin-inline: 0.25rem;
+}
+
+.pagination .last {
+  margin-inline: 0.25rem;
 }

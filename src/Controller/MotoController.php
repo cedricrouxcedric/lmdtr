@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class MotoController extends AbstractController
@@ -66,9 +67,15 @@ class MotoController extends AbstractController
     /**
      * @Route("/moto", name="moto_index", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request,
+                          PaginatorInterface $paginator): Response
     {
-        $motos = $this->MotoRepository->findAll();
+        $motosAll = $this->MotoRepository->findAll();
+        $motos = $paginator->paginate(
+          $motosAll,
+          $request->query->getInt('page', 1),
+          6
+        );
         return $this->render('moto/index.html.twig', [
             'motos' => $motos,
         ]);
