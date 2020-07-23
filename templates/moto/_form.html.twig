@@ -8,21 +8,23 @@
             <h2 class="col-12">Images</h2>
             {% for image in moto.images %}
 
-                    <div class="mx-2 column ">
-                        <a class="px-3 column "
-                           href="{{ path('moto_delete_image', {'id' : image.id}) }}"
-                           data-delete
-                           data-need="{{ moto.id }}"
-                           data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer la photo
-                            <img title="img{{ image.id }}"
-                                 class="pt-3" src="{{ asset('/uploads/' ~ image.name) }}"
-                                 alt="Image" width="150">
-                        </a>
+                <div class="mx-2 column ">
+
+                    <a class="px-3 column "
+                       href="{{ path('moto_delete_image', {'id' : image.id}) }}"
+                       data-delete
+                       data-need="{{ moto.id }}"
+                       data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer la photo
+                        <img title="img{{ image.id }}"
+                             class="pt-3" src="{{ asset('/uploads/' ~ image.name) }}"
+                             alt="Image" width="150">
+                    </a>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
-
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+    <div>
+        <button class="m-3 btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    </div>
     {{ form_end(form) }}
 </div>

@@ -21,17 +21,18 @@ class MotoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prix')
+            ->add('marque',null,['choice_label' => 'name'])
+            ->add('model',TextType::class)
+            ->add('cylindree',IntegerType::class,['label' => 'cylindrée'])
+
             ->add('year',IntegerType::class,['label' => 'Année'])
             ->add('kilometrage',IntegerType::class)
             ->add('din',IntegerType::class,['label' => 'puissance'])
             ->add('fisc',IntegerType::class,['label' => 'puissance fiscal' ])
             ->add('categorie',null,['choice_label' => 'name'])
-            ->add('marque',null,['choice_label' => 'name'])
-            ->add('model',TextType::class)
             // Ajout du champ "IMAGES" au formulaire n'etant pas lié a la bdd (mapped false)
             ->add('images', FileType::class, [
-                'label' => false,
+                'label' => "Photos",
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false
@@ -39,9 +40,7 @@ class MotoType extends AbstractType
             ->add('a2',CheckboxType::class,[
                 'label' => 'Conforme permis A2',
                 'required' => false])
-            ->add('sold',CheckboxType::class,[
-                'label' => 'Vendue',
-                'required' => false])
+            ->add('prix')
         ;
     }
 

@@ -68,11 +68,6 @@ class Moto
     private $model;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $sold = false;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $din;
@@ -87,9 +82,15 @@ class Moto
      */
     private $images;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cylindree;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -193,18 +194,6 @@ class Moto
         $this->model = $model;
     }
 
-    public function getSold(): ?bool
-    {
-        return $this->sold;
-    }
-
-    public function setSold(bool $sold): self
-    {
-        $this->sold = $sold;
-
-        return $this;
-    }
-
     /**
      * @return mixed
      */
@@ -235,6 +224,22 @@ class Moto
     public function setFisc($fisc): void
     {
         $this->fisc = $fisc;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCylindree()
+    {
+        return $this->cylindree;
+    }
+
+    /**
+     * @param mixed $cylindree
+     */
+    public function setCylindree($cylindree): void
+    {
+        $this->cylindree = $cylindree;
     }
 
     /**

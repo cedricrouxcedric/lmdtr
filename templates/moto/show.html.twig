@@ -45,6 +45,10 @@
                     <td>{{ moto.categorie.name }}</td>
                 </tr>
                 <tr>
+                    <td>Cylindrée</td>
+                    <td>{{ moto.cylindree }} cc</td>
+                </tr>
+                <tr>
                     <td>Année</td>
                     <td>{{ moto.year }}</td>
                 </tr>
@@ -55,6 +59,10 @@
                 <tr>
                     <td>Puissance din/fical</td>
                     <td>{{ moto.din }} / {{ moto.fisc }}</td>
+                </tr>
+                <tr>
+                    <td>Moto compatible a2</td>
+                    <td>{{ moto.a2 ? "Oui" : "Non"  }}</td>
                 </tr>
             </table>
         </div>
