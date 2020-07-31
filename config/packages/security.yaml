@@ -1,8 +1,9 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: auto
-            cost: 13
+            algorithm: argon2i
+            cost: 15
+
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:

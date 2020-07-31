@@ -4,11 +4,20 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="{{ value }} est deja utilisé."
+ * )
+ * @UniqueEntity(
+ *     fields={"username"},
+ *     message="{{ value }} est deja utilisé."
+ * )
  */
 class User implements UserInterface
 {
@@ -25,8 +34,8 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
+     * @ORM\Column(type="string", length=255, unique=true )
+     * @Assert\Email(message = "l'adresse '{{ value }}' n'est pas un email valide.")
      */
     private $email;
 
@@ -38,8 +47,24 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir minimum 8 caractères")
      */
     private $password;
+
+    /**
+     * * @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas tapé le même mot de passe")
+     */
+    private $confirm_password;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $confirmationCode;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validateAccount = false;
 
     public function getId(): ?int
     {
@@ -100,6 +125,22 @@ class User implements UserInterface
     /**
      * @return mixed
      */
+    public function getConfirmPassword()
+    {
+        return $this->confirm_password;
+    }
+
+    /**
+     * @param mixed $confirm_password
+     */
+    public function setConfirmPassword($confirm_password): void
+    {
+        $this->confirm_password = $confirm_password;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getEmail()
     {
         return $this->email;
@@ -113,13 +154,44 @@ class User implements UserInterface
         $this->email = $email;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getConfirmationCode()
+    {
+        return $this->confirmationCode;
+    }
+
+    /**
+     * @param mixed $confirmationCode
+     */
+    public function setConfirmationCode($confirmationCode): void
+    {
+        $this->confirmationCode = $confirmationCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidateAccount()
+    {
+        return $this->validateAccount;
+    }
+
+    /**
+     * @param mixed $validateAccount
+     */
+    public function setValidateAccount($validateAccount): void
+    {
+        $this->validateAccount = $validateAccount;
+    }
 
     /**
      * @see UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**

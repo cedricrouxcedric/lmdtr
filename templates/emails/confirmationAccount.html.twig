@@ -1,0 +1,4 @@
+<h1>Confirmation de votre adresse email</h1>
+<p>Bonjour {{ user.username }}</p>
+<p>Vous recevez ce mail car vous venez de créer un compte sur le site  Lesmotardsdetaregion</p>
+<p><a href="{{ absolute_url(path('activation',{'token': user.confirmationCode})) }}">veuillez cliquer sur ce lien afin de valider votre compte</a></p>

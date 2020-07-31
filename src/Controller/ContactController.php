@@ -8,9 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class ContactController extends AbstractController
 {
+    const EMAILSITE = 'lesmotardsdetaregion@gmail.com';
+
     /**
      * @Route("/contact", name="contact")
      */
@@ -24,15 +27,16 @@ class ContactController extends AbstractController
 
             // on envoie le mail
 
-                $email = (new Email())
+                $email = (new TemplatedEmail())
                     ->from($contact['email'])
-                    ->to('lesmotardsdetaregion@gmail.com')
-                    ->cc($contact['email'])
-                    //->bcc('bcc@example.com')
-                    //->replyTo('fabien@example.com')
-                    //->priority(Email::PRIORITY_HIGH)
-                    ->subject('Message de contact envoyé par : ' .$contact['email'])
-                   ->html($contact['message']);
+                    ->to(self::EMAILSITE)
+                    // TODO rajouter une condition si l'utilisateur est identifié metttre le mettre en copie
+                    //->cc($contact['email'])
+                    ->subject('Message de contact envoyé depuis lmdtr : ' .$contact['email'])
+                   ->htmlTemplate('emails/contact.html.twig')
+                    ->context([
+                        'contact' => $contact,
+                    ]);
 
                 $mailer->send($email);
             $this->addFlash('success', 'Le message a bien été envoyé');

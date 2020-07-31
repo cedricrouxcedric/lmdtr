@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <h1>Inscription sur Les motards de ta region</h1>
+
+    <div class="form-group">
+        {{ form_start(form) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.username, {'label': 'Nom utilisateur', 'attr' : {'placeholder': 'Nom d\'utilisateur'} }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.email, {'label': 'Adresse email', 'attr' : {'placeholder': 'Adresse email'} }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.password, {'label': 'Mot de passe ', 'attr' : {'placeholder': 'Mot de passe'} }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.confirm_password, {'label': 'Confirmer MDP', 'attr' : {'placeholder': 'Confirmez votre MDP'} }) }}
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success ml-3" type="submit">Inscription</button>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

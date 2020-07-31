@@ -25,6 +25,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $subscriber->setUsername('sub');
         $subscriber->setEmail('subscriber@monsite.com');
         $subscriber->setRoles(['ROLE_SUBSCRIBER']);
+        $subscriber->setValidateAccount(true);
         $subscriber->setPassword($this->passwordEncoder->encodePassword(
             $subscriber,
             'subscriberpassword'
@@ -37,6 +38,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $admin->setUsername('Admin');
         $admin->setEmail('admin@monsite.com');
         $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setValidateAccount(true);
         $admin->setPassword($this->passwordEncoder->encodePassword(
             $admin,
             'adminpassword'
