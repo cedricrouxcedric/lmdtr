@@ -103,6 +103,8 @@ class MotoController extends AbstractController
         ]);
     }
     //TODO utiliser le em du constructeur
+    // TODO Voir prk les images ne s'enregistre pas a la creation d'une annonce
+
 
     /**
      * @Route("/moto/new", name="moto_new", methods={"GET","POST"})

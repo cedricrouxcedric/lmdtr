@@ -57,7 +57,7 @@ class User implements UserInterface
     private $confirm_password;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $confirmationCode;
 
@@ -65,6 +65,11 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $validateAccount = false;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $resetToken;
 
     public function getId(): ?int
     {
@@ -184,6 +189,22 @@ class User implements UserInterface
     public function setValidateAccount($validateAccount): void
     {
         $this->validateAccount = $validateAccount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param mixed $resetToken
+     */
+    public function setResetToken($resetToken): void
+    {
+        $this->resetToken = $resetToken;
     }
 
     /**

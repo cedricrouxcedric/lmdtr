@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChangePassType;
 use App\Form\RegistrationType;
+use App\Form\ResetPassType;
 use App\Form\ValidationCodeType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +18,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -93,7 +97,11 @@ class SecurityController extends AbstractController
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($user);
                 $manager->flush();
-                $this->sendCode($email, $mailer, $user);
+                $this->sendMail($email,
+                    $mailer,
+                    $user,
+                    'emails/confirmationAccount.html.twig',
+                    'Confirmation de votre adresse email');
                 $token = new UsernamePasswordToken(
                     $user,
                     $password,
@@ -101,7 +109,7 @@ class SecurityController extends AbstractController
                     $user->getRoles()
                 );
                 $this->get('security.token_storage')->setToken($token);
-                $this->get('session')->set('_security_main',serialize($token));
+                $this->get('session')->set('_security_main', serialize($token));
             }
             $this->addFlash('success', "Votre compte utilisateur à bien été crée veuillez valider votre compte");
             return $this->redirectToRoute('moto_index');
@@ -117,15 +125,16 @@ class SecurityController extends AbstractController
         return $this->render('security/registration.html.twig', ['form' => $form->createView()]);
     }
 
-
     /**
      * @Route("/activation/{token}", name="activation")
      */
-    public function activation($token, UserRepository $userRepository) {
+    public function activation($token,
+                               UserRepository $userRepository)
+    {
         // check si un user a ce token
         $user = $userRepository->findOneBy(['confirmationCode' => $token]);
         // si pas de user avec ce token
-        if(!$user){
+        if (!$user) {
             throw $this->createNotFoundException('cet utilisateur n\'existe pas ');
         }
 //        suppression du token
@@ -140,19 +149,91 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('lmdtr_index');
     }
 
+    /**
+     * @Route ("/oubli-mdp", name="app_forgot_password")
+     */
+    public function forgottenPassword(Request $request,
+                                      UserRepository $userRepository,
+                                      TokenGeneratorInterface $tokenGenerator,
+                                      MailerInterface $mailer)
+    {
 
-    private function sendCode($to,
+        $form = $this->createForm(ResetPassType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $user = $userRepository->findOneBy(['email' => $data['email']]);
+            if (is_null($user)) {
+                $this->addFlash('error', 'Cette adresse n\'existe pas');
+                return $this->redirectToRoute('app_reset_password');
+            }
+            $token = $tokenGenerator->generateToken();
+            try {
+                $user->setResetToken($token);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+            } catch (Exception $e) {
+                $this->addFlash('danger', "Une erreur est survenue : " . $e->getMessage());
+                return $this->redirectToRoute('app_login');
+            }
+            $this->sendMail($user->getEmail(),
+                $mailer,
+                $user,
+                'emails/resetPassword.html.twig',
+                'Réinitialisation de votremot de passe');
+            $this->addFlash('success', 'Un email de reinitialisation de votre mot de passe vient de vous être envoyé');
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('security/forgottenPassword.html.twig', ['emailForm' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/reset-mdp/{token}" , name="app_reset_password")
+     */
+    public function resetPassword(Request $request,
+                                  $token,
+                                  UserRepository $userRepository,
+                                  UserPasswordEncoderInterface $encoder)
+    {
+        $user = $userRepository->findOneBy(['resetToken' => $token]);
+        if (!$user) {
+            $form = $this->createForm(ResetPassType::class);
+            $this->addFlash('error', 'Token inconnu');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $form = $this->createForm(ChangePassType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($encoder->encodePassword($user, $request->request->get('password')));
+            $user->setResetToken(null);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'Votre mot de passe vient d\'etre modifié avec succés');
+            return $this->redirectToRoute('app_login');
+        } else {
+            return $this->render('security/passwordChange.html.twig', ['changePassForm' => $form->createView()]);
+        }
+    }
+
+
+    private function sendMail($to,
                               MailerInterface $mailer,
-                              User $user)
+                              User $user,
+                              $template,
+                              $subject)
     {
 
         $email = (new TemplatedEmail())
             ->from(self::EMAILSITE)
             ->to($to)
-            ->subject('Confirmation de votre adresse email')
-            ->htmlTemplate('emails/confirmationAccount.html.twig')
+            ->subject($subject)
+            ->htmlTemplate($template)
             ->context([
                 'user' => $user,
+                'token' => $user->getResetToken(),
             ]);
 
         $mailer->send($email);

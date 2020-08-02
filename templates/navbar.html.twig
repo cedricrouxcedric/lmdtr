@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
                     </li>
+                    <li class="nav-item">
+                        <p class="nav-link"> {{ app.user.username}}</p>
+                    </li>
                 {% endif %}
             </div>
         </ul>
