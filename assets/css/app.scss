@@ -22,8 +22,14 @@ body {
   z-index: -1;
 }
 
-.nav-item {
-  color: #5eb5e0;
+.navbar-dark .navbar-nav .nav-link {
+  &:hover {
+    color: cadetblue;
+  }
+}
+
+.navbar-dark .navbar-brand:hover {
+  color: cadetblue;
 }
 
 .space {

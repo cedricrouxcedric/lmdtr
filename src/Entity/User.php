@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -70,6 +72,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private $resetToken;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Moto::class, mappedBy="vendeur", orphanRemoval=true)
+     */
+    private $motos;
+
+    public function __construct()
+    {
+        $this->motos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -222,5 +234,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Moto[]
+     */
+    public function getMotos(): Collection
+    {
+        return $this->motos;
+    }
+
+    public function addMoto(Moto $moto): self
+    {
+        if (!$this->motos->contains($moto)) {
+            $this->motos[] = $moto;
+            $moto->setVendeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMoto(Moto $moto): self
+    {
+        if ($this->motos->contains($moto)) {
+            $this->motos->removeElement($moto);
+            // set the owning side to null (unless already changed)
+            if ($moto->getVendeur() === $this) {
+                $moto->setVendeur(null);
+            }
+        }
+
+        return $this;
     }
 }

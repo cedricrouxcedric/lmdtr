@@ -7,29 +7,27 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-
     <body class="container">
-    {% block nav %}
         {% include 'navbar.html.twig' %}
-    <div class="here"></div>
-    {% endblock %}
-    {% for message in app.flashes('success') %}
+    <div class="here">
+        {% if not is_granted("ROLE_SUBSCRIBER") and is_granted('ROLE_USER') %}
+            <h3 class="text-center text-danger">Pour profiter pleinement de votre site veuillez valider votre compte !</h3>
+        {% endif %}</div>
 
+    {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
         </div>
-
     {% endfor %}
 
     {% for message in app.flashes('error') %}
-
         <div class="alert alert-danger">
             {{ message }}
         </div>
-
     {% endfor %}
 
         {% block body %}
+
         {% endblock %}
 
         {% block javascripts %}

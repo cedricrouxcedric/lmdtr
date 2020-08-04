@@ -1,5 +1,5 @@
 <h1>Nouveau contact</h1>
-<p>Nom : {{ contact.nom }}</p>
-<p>Email : {{ contact.email }}</p>
+<p>Nom renseigné :  {{ contact.nom }}</p>
+<p>Email : {{ user is not null ? user.email : contact.email }}</p>
 <p>Message : {{ contact.message }}</p>
-<p>Envoyé par {{ contact.email }}</p>
+<p>Envoyé par {{ user is not null ? user.username : contact.email }}</p>

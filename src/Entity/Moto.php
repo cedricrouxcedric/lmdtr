@@ -87,6 +87,12 @@ class Moto
      */
     private $cylindree;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="motos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $vendeur;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -269,6 +275,17 @@ class Moto
                 $image->setMoto(null);
             }
         }
+        return $this;
+    }
+
+    public function getVendeur(): ?User
+    {
+        return $this->vendeur;
+    }
+
+    public function setVendeur(?User $vendeur): self
+    {
+        $this->vendeur = $vendeur;
 
         return $this;
     }

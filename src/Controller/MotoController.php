@@ -7,13 +7,14 @@ use App\Entity\Moto;
 use App\Form\MotoType;
 use App\Repository\MotoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MotoController extends AbstractController
 {
@@ -102,15 +103,15 @@ class MotoController extends AbstractController
             'motos' => $motos,
         ]);
     }
-    //TODO utiliser le em du constructeur
-    // TODO Voir prk les images ne s'enregistre pas a la creation d'une annonce
-
 
     /**
+     * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/moto/new", name="moto_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request,
+                        UserInterface $user): Response
     {
+        dump($request);
         $moto = new Moto();
         $form = $this->createForm(MotoType::class, $moto);
         $form->handleRequest($request);
@@ -120,9 +121,9 @@ class MotoController extends AbstractController
             if ($this->checkExt($images)) {
                 // On boucle sur les images
                 foreach ($images as $image) {
-                    $this->uploadImg($image);
+                    $this->uploadImg($image, $moto);
                 }
-
+                $moto->setVendeur($user);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($moto);
                 $entityManager->flush();
@@ -134,6 +135,7 @@ class MotoController extends AbstractController
         return $this->render('moto/new.html.twig', [
             'moto' => $moto,
             'form' => $form->createView(),
+            'user' => $user,
         ]);
     }
 
@@ -148,6 +150,7 @@ class MotoController extends AbstractController
     }
 
     /**
+     * @IsGranted ("ROLE_SUBSCRIBER")
      * @Route("/moto/{id}/edit", name="moto_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Moto $moto): Response
@@ -177,6 +180,7 @@ class MotoController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/moto/{id}", name="moto_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Moto $moto): Response
@@ -186,7 +190,6 @@ class MotoController extends AbstractController
             $entityManager->remove($moto);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('moto_index');
     }
 
@@ -198,12 +201,10 @@ class MotoController extends AbstractController
                                 EntityManagerInterface $em)
     {
         $data = json_decode($request->getContent(), true);
-
         // Verification si le token est valide
         if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
             $nom = $image->getName();
             unlink($this->getParameter('images_directory') . '/' . $nom);
-
             $em = $this->getDoctrine()->getManager();
             $em->remove($image);
             $em->flush();

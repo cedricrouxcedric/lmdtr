@@ -141,6 +141,8 @@ class SecurityController extends AbstractController
         $user->setConfirmationCode(null);
         // validation du compte
         $user->setValidateAccount(true);
+        // attribution du role subscriber lors de la validation du compte
+        $user->setRoles(["ROLE_SUBSCRIBER"]);
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
@@ -181,7 +183,7 @@ class SecurityController extends AbstractController
                 $mailer,
                 $user,
                 'emails/resetPassword.html.twig',
-                'Réinitialisation de votremot de passe');
+                'Réinitialisation de votre mot de passe');
             $this->addFlash('success', 'Un email de reinitialisation de votre mot de passe vient de vous être envoyé');
             return $this->redirectToRoute('app_login');
         }
@@ -198,18 +200,17 @@ class SecurityController extends AbstractController
     {
         $user = $userRepository->findOneBy(['resetToken' => $token]);
         if (!$user) {
-            $form = $this->createForm(ResetPassType::class);
             $this->addFlash('error', 'Token inconnu');
             return $this->redirectToRoute('app_login');
         }
-
         $form = $this->createForm(ChangePassType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($encoder->encodePassword($user, $request->request->get('password')));
+            $data = $form->getData();
+            $code = $data->getpassword();
+            $user->setPassword($encoder->encodePassword($user, $code));
             $user->setResetToken(null);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
             $em->flush();
             $this->addFlash('success', 'Votre mot de passe vient d\'etre modifié avec succés');
             return $this->redirectToRoute('app_login');
@@ -217,8 +218,6 @@ class SecurityController extends AbstractController
             return $this->render('security/passwordChange.html.twig', ['changePassForm' => $form->createView()]);
         }
     }
-
-
     private function sendMail($to,
                               MailerInterface $mailer,
                               User $user,
