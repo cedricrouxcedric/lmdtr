@@ -84,3 +84,30 @@ a {
 .pagination .last {
   margin-inline: 0.25rem;
 }
+
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
+.dropdown>.dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+  pointer-events: none;
+}
+
+.dropdown-item {
+  background-color: #313131;
+  margin: 0;
+  border: black 1px solid;
+  &:hover {
+    color: black;
+    background-color: grey;
+  }
+}
+
+.dropdown-menu {
+  padding: 0;
+}
+
+.grey {
+  color: gray;
+}
