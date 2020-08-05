@@ -24,9 +24,14 @@ class Images
 
     /**
      * @ORM\ManyToOne(targetEntity=Moto::class, inversedBy="images")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $moto;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Piecedetachee::class, inversedBy="images")
+     */
+    private $piecedetachee;
 
     public function getId(): ?int
     {
@@ -53,6 +58,18 @@ class Images
     public function setMoto(?Moto $moto): self
     {
         $this->moto = $moto;
+
+        return $this;
+    }
+
+    public function getPiecedetachee(): ?Piecedetachee
+    {
+        return $this->piecedetachee;
+    }
+
+    public function setPiecedetachee(?Piecedetachee $piecedetachee): self
+    {
+        $this->piecedetachee = $piecedetachee;
 
         return $this;
     }

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Editer l'annonce{% endblock %}
+{% block title %}Modifier annonce moto{% endblock %}
 
 {% block body %}
-    <h1>Editer annonce</h1>
-    <div class="text-left">
-        <div>  {{ include('moto/_form.html.twig', {'button_label': "Mettre l'annonce à jour."}) }} </div>
-        <div>  {{ include('moto/_delete_form.html.twig') }} </div>
-        <p class="ml-2"><a href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a></p>
-        <p class="ml-2"><a href="{{ path('moto_index') }}">Retourner à la liste des motos d'occasions.</a></p>
+    <h1>Modifier annonce moto</h1>
+    <a class="btn btn-dark my-3" href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a>
+    <a class="btn btn-dark m-3" href="{{ path('moto_index') }}">Retourner à la liste des motos d'occasions.</a>
+    <div>
+        <div class="">  {{ include('moto/_form.html.twig', {'button_label': "Mettre l'annonce à jour."}) }}</div>
+         <div> {{ include('moto/_delete_form.html.twig') }} </div>
     </div>
 {% endblock %}

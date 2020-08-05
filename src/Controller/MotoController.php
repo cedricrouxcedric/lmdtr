@@ -111,7 +111,6 @@ class MotoController extends AbstractController
     public function new(Request $request,
                         UserInterface $user): Response
     {
-        dump($request);
         $moto = new Moto();
         $form = $this->createForm(MotoType::class, $moto);
         $form->handleRequest($request);
@@ -168,6 +167,7 @@ class MotoController extends AbstractController
                 }
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('success', 'Annonce modifiée');
+                return $this->redirectToRoute('moto_show', array('id' => $moto->getId()));
             } else {
                 $this->addFlash('error', "Les photos ne respectent pas le format requis");
             }

@@ -1,20 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Moto{% endblock %}
+{% block title %}Piece d'étachée{% endblock %}
 
 {% block body %}
-
-    {% set vendeuroradmin = ((app.user == moto.vendeur) or (is_granted("ROLE_ADMIN"))) %}
+    {% set vendeuroradmin = ((app.user == piecedetachee.vendeur) or (is_granted("ROLE_ADMIN"))) %}
     <div class="jumbotron px-5 pt-3">
         <div class="container">
-            <h1 class="text-center">{{ moto.marque.name }}  {{ moto.model }}</h1>
+            <h1 class="text-center">{{ piecedetachee.marque.name }}  {{ piecedetachee.model }}</h1>
             <div class="rown justify-content-center">
                 <div class="col-12 text-center">
                     <div class="">
-                        {% if moto.images %}
+                        {% if piecedetachee.images %}
                             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
-                                    {% for image in moto.images %}
+                                    {% for image in piecedetachee.images %}
                                         <div class="carousel-item {{ loop.first ? 'active' : ' ' }}">
                                             <img class="d-block w-75 m-auto"
                                                  src="{{ asset('/uploads/' ~ image.name)| imagine_filter('thumb') }}"
@@ -46,55 +45,48 @@
         <div class="col-md-8">
             <table class="table table-striped">
                 <tr>
-                    <td>Categorie</td>
-                    <td>{{ moto.categorie.name }}</td>
+                    <td>Piece</td>
+                    <td>{{ piecedetachee.name }}</td>
                 </tr>
                 <tr>
-                    <td>Cylindrée</td>
-                    <td>{{ moto.cylindree }} cc</td>
+                    <td>Marque de moto</td>
+                    <td>{{ piecedetachee.marque.name }}</td>
                 </tr>
                 <tr>
-                    <td>Année</td>
-                    <td>{{ moto.year }}</td>
+                    <td>Model de moto</td>
+                    <td>{{ piecedetachee.model }} cc</td>
                 </tr>
                 <tr>
-                    <td>Kilométrage :</td>
-                    <td>{{ moto.kilometrage }}</td>
+                    <td>description</td>
+                    <td>{{ piecedetachee.description }}</td>
                 </tr>
                 <tr>
-                    <td>Puissance din/fical</td>
-                    <td>{{ moto.din }} / {{ moto.fisc }}</td>
-                </tr>
-                <tr>
-                    <td>Moto compatible a2</td>
-                    <td>{{ moto.a2 ? "Oui" : "Non" }}</td>
+                    <td>Prix</td>
+                    <td>{{ piecedetachee.formattedPrice }}</td>
                 </tr>
                 <tr>
                     <td>Vendeur</td>
-                    <td>{{ moto.vendeur.username}}</td>
+                    <td>{{ piecedetachee.vendeur.username}}</td>
                 </tr>
             </table>
         </div>
     </div>
 
-    {% if  (is_granted("ROLE_SUBSCRIBER")) %}
-        {% if ( moto.vendeur != app.user ) %}
-            <a href="{{ path('contactmoto_vendeur',{'moto': moto.id}) }}" class="btn btn-primary ">Contacter le
-                vendeur</a>
-        {% endif %}
+    {% if  is_granted("ROLE_SUBSCRIBER")%}
+    {% if ( piecedetachee.vendeur != app.user ) %}
+        <a href="{{ path('contact_vendeur',{'piece': piecedetachee.id}) }}" class="btn btn-primary ">Contacter le vendeur</a>
+    {% endif %}
     {% else %}
         <a href="{{ path('app_login') }}">Vous devez valider votre compte pour pouvoir contacter le vendeur</a>
     {% endif %}
-    <div class="text-primary pt-0 text-right" style="font-size: 3rem; font-weight: bold">{{ moto.formattedPrice }}</div>
+    <div class="text-primary pt-0 text-right" style="font-size: 3rem; font-weight: bold">{{ piecedetachee.formattedPrice }}</div>
     <div>
-        <a class="btn btn-dark" href="{{ path('moto_index') }}">Retourner à liste des motos d'occasion</a>
+        <a class="btn btn-dark" href="{{ path('piecedetachee_index') }}">Retourner à liste des piece detachees d'occasion</a>
     </div>
     {% if vendeuroradmin %}
-        <div>
-            <a class="btn btn-danger my-3" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
+        <div class="my-3">
+            <a class="btn btn-danger" href="{{ path('piecedetachee_edit', {'id': piecedetachee.id}) }}">Modifier l'annonce</a>
         </div>
     {% endif %}
-
-        </div>
-
+    </div>
 {% endblock %}

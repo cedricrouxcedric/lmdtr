@@ -3,9 +3,9 @@
 {% block title %}Nouvelle annonce moto{% endblock %}
 
 {% block body %}
-    <h1>Dépose ton annonce</h1>
+    <h1>Dépose ton annonce moto</h1>
 
     {{ include('moto/_form.html.twig') }}
 
-    <a href="{{ path('moto_index') }}">Retourner à la liste des motos d'occasions</a>
+    <a class="btn btn-dark" href="{{ path('moto_index') }}">Retourner à la liste des motos d'occasions</a>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Moto;
+use App\Entity\Piecedetachee;
 use App\Form\ContactType;
 use App\Form\ContactVendeurType;
 use App\Repository\MotoRepository;
@@ -34,6 +35,7 @@ class ContactController extends AbstractController
             $email = (new TemplatedEmail())
                 ->from($user ? $copy : $contact['email'])
                 ->to(self::EMAILSITE)
+                ->replyTo($copy)
                 ->cc($copy)
                 ->subject('Message de contact envoyé depuis lmdtr : ' . $copy)
                 ->htmlTemplate('emails/contact.html.twig')
@@ -53,7 +55,7 @@ class ContactController extends AbstractController
 
     /**
      * @IsGranted("ROLE_SUBSCRIBER")
-     * @Route("/contact/{moto}", name="contact_vendeur")
+     * @Route("/contact/{moto}", name="contactmoto_vendeur")
      */
     public function sendMessageToVendeur(Moto $moto,
                                          Request $request,
@@ -69,6 +71,7 @@ class ContactController extends AbstractController
             $email = (new TemplatedEmail())
                 ->from($copy)
                 ->to($moto->getVendeur()->getEmail())
+                ->replyTo($copy)
                 ->cc($copy)
                 ->subject('Votre annonce sur Lesmotardsdetaregion')
                 ->htmlTemplate('emails/contactVendeur.html.twig')
@@ -81,6 +84,42 @@ class ContactController extends AbstractController
             $mailer->send($email);
             $this->addFlash('success', 'Le message a bien été envoyé');
             return $this->redirectToRoute('moto_index');
+        }
+        return $this->render('contact/contactVendeur.html.twig', [
+            'contactVendeurForm' => $form->createView(),
+        ]);
+    }
+    /**
+     * @IsGranted("ROLE_SUBSCRIBER")
+     * @Route("/contact/{piece}", name="contact_vendeur")
+     */
+    public function sendMessageToVendeurPiece(Piecedetachee $piece,
+                                         Request $request,
+                                         MailerInterface $mailer,
+                                         UserInterface $user)
+    {
+        $form = $this->createForm(ContactVendeurType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $copy = $user->getemail();
+            $data = $form->getData();
+            $email = (new TemplatedEmail())
+                ->from($copy)
+                ->to($piece->getVendeur()->getEmail())
+                ->replyTo($copy)
+                ->cc($copy)
+                ->subject('Votre annonce sur Lesmotardsdetaregion')
+                ->htmlTemplate('emails/contactVendeurPieceDetachee.html.twig')
+                ->context([
+                    'message' => $data,
+                    'piecedetachee' => $piece,
+                    'user' => $user,
+                ]);
+
+            $mailer->send($email);
+            $this->addFlash('success', 'Le message a bien été envoyé');
+            return $this->redirectToRoute('piecedetachee_index');
         }
         return $this->render('contact/contactVendeur.html.twig', [
             'contactVendeurForm' => $form->createView(),

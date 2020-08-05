@@ -33,11 +33,6 @@
             </div>
         {% endfor %}
     </div>
-    {% if is_granted("ROLE_SUBSCRIBER") %}
-        <div class="row">
-            <a href="{{ path('moto_new') }}">Créer une annonce.</a>
-        </div>
-    {% endif %}
     <div class="navigation">
         {{ knp_pagination_render(motos) }}
     </div>

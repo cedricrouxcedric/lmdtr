@@ -1,0 +1,30 @@
+<div class="form-group">
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+
+    {% if app.request.attributes.get('_route') == 'piecedetachee_edit' %}
+        <div class="row">
+            <h2 class="col-12">Images</h2>
+            {% for image in piecedetachee.images %}
+                <div class="mx-2 column ">
+
+                    <a class="px-3 column "
+                       href="{{ path('piecedetachee_delete_image', {'id' : image.id}) }}"
+                       data-delete
+                       data-need="{{ piecedetachee.id }}"
+                       data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer la photo
+                        <img title="img{{ image.id }}"
+                             class="pt-3" src="{{ asset('/uploads/' ~ image.name) }}"
+                             alt="Image" width="150">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div>
+        <button class="mt-3 btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+    {{ form_end(form) }}
+
+</div>

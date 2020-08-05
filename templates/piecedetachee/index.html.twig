@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Piéces d'étachées occasion{% endblock %}
+{% block body %}
+    <h1>Piéces d'étachées occasions</h1>
+    <div class="row">
+        {% for piece in piecedetachees %}
+            {% set vendeur = ((app.user == piece.vendeur) or (is_granted("ROLE_ADMIN"))) %}
+            <div class="col-4">
+                <div class="card mb-4">
+                    {% if piece.images is not empty %}
+                        <div>
+                            <img class="card-img img-moto"
+                                 src="{{ asset('/uploads/' ~ piece.images|first.name)| imagine_filter('thumb') }}"
+                                 alt="Image">
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title text-center">
+                            {{ piece.marque.name }} - {{ piece.model }}
+                        </h5>
+                        <p class="card-text text-center">{{ piece.FormattedPrice }}</p>
+                        <p>Vendeur : {{ piece.vendeur.username }} </p>
+                        <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
+                            <a class="{{ vendeur ? " " : "card-text text-center " }}col-6 "
+                               href="{{ path('piecedetachee_show', {'id': piece.id}) }}">Voir l'annonce.</a>
+                            {% if vendeur %}
+                                <a class="col-6" href="{{ path('piecedetachee_edit', {'id': piece.id}) }}">Modifier
+                                    l'annonce</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(piecedetachees) }}
+    </div>
+{% endblock %}

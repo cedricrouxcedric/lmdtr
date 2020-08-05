@@ -31,9 +31,15 @@ class Marque
      */
     private $moto;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Piecedetachee::class, mappedBy="marque")
+     */
+    private $piecedetachees;
+
     public function __construct()
     {
         $this->moto = new ArrayCollection();
+        $this->piecedetachees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,6 +83,37 @@ class Marque
             // set the owning side to null (unless already changed)
             if ($moto->getCategorie() === $this) {
                 $moto->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Piecedetachee[]
+     */
+    public function getPiecedetachees(): Collection
+    {
+        return $this->piecedetachees;
+    }
+
+    public function addPiecedetachee(Piecedetachee $piecedetachee): self
+    {
+        if (!$this->piecedetachees->contains($piecedetachee)) {
+            $this->piecedetachees[] = $piecedetachee;
+            $piecedetachee->setMarque($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiecedetachee(Piecedetachee $piecedetachee): self
+    {
+        if ($this->piecedetachees->contains($piecedetachee)) {
+            $this->piecedetachees->removeElement($piecedetachee);
+            // set the owning side to null (unless already changed)
+            if ($piecedetachee->getMarque() === $this) {
+                $piecedetachee->setMarque(null);
             }
         }
 

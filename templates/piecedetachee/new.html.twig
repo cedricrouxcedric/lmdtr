@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle annonce Pièce détachée{% endblock %}
+
+{% block body %}
+    <h1>Dépose ton annonce de piéce détachée</h1>
+
+    {{ include('piecedetachee/_form.html.twig') }}
+
+    <a class="btn btn-dark" href="{{ path('piecedetachee_index') }}">Retourner à la liste des pièces détachées</a>
+{% endblock %}
