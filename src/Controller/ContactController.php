@@ -24,13 +24,15 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact", name="contact")
      */
-    public function index(Request $request, MailerInterface $mailer, ?UserInterface $user)
+    public function index(Request $request,
+                          MailerInterface $mailer,
+                          ?UserInterface $user)
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
-        $copy = is_null($user) ? "" : $user->getemail();
         if ($form->isSubmitted() && $form->isValid()) {
             $contact = $form->getData();
+            $copy = is_null($user) ? $contact['email'] : $user->getemail();
             // on envoie le mail
             $email = (new TemplatedEmail())
                 ->from($user ? $copy : $contact['email'])

@@ -289,4 +289,9 @@ class Moto
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getModel();
+    }
 }

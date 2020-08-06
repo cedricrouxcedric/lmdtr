@@ -177,4 +177,9 @@ class Piecedetachee
     {
         $this->vendeur = $vendeur;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

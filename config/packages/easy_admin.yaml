@@ -1,0 +1,66 @@
+easy_admin:
+    site_name: 'Gestion de mon site'
+    user:
+        display_name: true
+    design:
+        form_theme:
+            - "@EasyAdmin/form/bootstrap_4.html.twig"
+        menu:
+            - { entity: 'user', label: 'Utilisateurs', icon: 'user' }
+            - label: 'Annonces'
+              icon: 'newspaper-o'
+              children:
+                  - { entity: 'Piecedetachee', label: 'Pieces détachées', icon: 'tag' }
+                  - { entity: 'moto', label: 'Motos', icon: 'tag' }
+            - { entity: 'categorie', label: 'Categories', icon: 'tag' }
+            - { entity: 'marque', label: 'Marques', icon: 'tag' }
+
+    formats:
+        datetime: 'd/m/Y à H:i'
+    entities:
+        # List the entity class name you want to manage
+        user:
+            class: App\Entity\User
+            label: 'Utilisateurs'
+            list:
+                fields:
+                    - id
+                    - username
+                    - email
+                    - { property: 'validate_account', label: 'Compte validé', type: 'toggle'}
+                    - { property: 'roles', label: 'Rôles', type: json_array}
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
+            form:
+                fields:
+                    - { property: 'username', 'label':"Nom d'utilisateur"}
+                    - email
+                    - { property: 'validate_account', label: 'Compte valide', type: 'checkbox'}
+
+                    - { property: 'roles', label: 'Rôles', type: choice, type_options: {expanded: true, multiple: true, choices: {'Utilisateur inscrit':'ROLE_USER', 'Utilisateur validé':'ROLE_SUBSCRIBER' ,'Administrateur':'ROLE_ADMIN','Super Admin':'ROLE_SUPERADMIN'}}}
+
+        marque:
+            class: App\Entity\Marque
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
+        Piecedetachee:
+            class: App\Entity\Piecedetachee
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
+        categorie:
+            class: App\Entity\Categorie
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
+        moto:
+            class: App\Entity\Moto
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}

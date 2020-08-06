@@ -56,8 +56,15 @@
                 </a>
             </li>
             <div class="row connection">
+                {% if  is_granted("ROLE_SUPERADMIN") %}
+                <li class="nav-item mr-2">
+                    <a href="/superadmin"
+                       class="nav-link">
+                        Gestion
+                    </a>
+                {% endif %}
                 {% if not app.user %}
-                    <li class="nav-item">
+                    <li class="nav-item mr-2">
                         <a href="{{ path('app_login') }}"
                            class="nav-link">
                             Connexion
@@ -71,14 +78,14 @@
                     </li>
                 {% endif %}
                 {% if app.user %}
-                    <li class="nav-item">
+                    <li class="nav-item mr-2">
                         <a href="{{ path('app_logout') }}"
                            class="nav-link">
                             Déconnexion
                         </a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link"> {{ app.user.username}}</p>
+                        <p class="nav-link">  {{ app.user.username}}</p>
                     </li>
                 {% endif %}
             </div>

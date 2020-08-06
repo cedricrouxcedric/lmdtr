@@ -263,7 +263,11 @@ class User implements UserInterface
                 $moto->setVendeur(null);
             }
         }
-
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }

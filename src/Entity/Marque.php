@@ -116,7 +116,11 @@ class Marque
                 $piecedetachee->setMarque(null);
             }
         }
-
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
