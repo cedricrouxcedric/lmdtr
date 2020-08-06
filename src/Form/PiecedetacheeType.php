@@ -21,7 +21,7 @@ class PiecedetacheeType extends AbstractType
                 'label' => 'marque de  moto'
             ])
             ->add('model',null, [
-                'label' => 'model de moto'
+                'label' => 'modele de moto'
             ])
             ->add('description')
             ->add('prix')
