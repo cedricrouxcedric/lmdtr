@@ -79,6 +79,11 @@ class User implements UserInterface
     private $motos;
 
     /**
+     * @ORM\OneToMany  (targetEntity="App\Entity\Piecedetachee", mappedBy="vendeur", orphanRemoval=true)
+     */
+    private $piecedetachees;
+
+    /**
      * @ORM\OneToMany(targetEntity=Commentaires::class, mappedBy="auteur", orphanRemoval=true)
      */
     private $commentaires;
@@ -282,6 +287,37 @@ class User implements UserInterface
         }
         return $this;
     }
+
+    /**
+     * @return @return Collection|Piecedetachee[]
+     */
+    public function getPiecedetachees()
+    {
+        return $this->piecedetachees;
+    }
+
+    public function addPiecedetachee(Piecedetachee $piecedetachee): self
+    {
+        if (!$this->piecedetachees->contains($piecedetachee)) {
+            $this->piecedetachees[] = $piecedetachee;
+            $piecedetachee->setVendeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiecedetachee(Piecedetachee $piecedetachee): self
+    {
+        if ($this->piecedetachees->contains($piecedetachee)) {
+            $this->piecedetachees->removeElement($piecedetachee);
+            // set the owning side to null (unless already changed)
+            if ($piecedetachee->getVendeur() === $this) {
+                $piecedetachee->setVendeur(null);
+            }
+        }
+        return $this;
+    }
+
 
     public function __toString()
     {

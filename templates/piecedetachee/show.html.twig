@@ -69,6 +69,7 @@
                     <td>{{ piecedetachee.vendeur.username}}</td>
                 </tr>
             </table>
+            <p>Publiée le : {{ piecedetachee.createdAt|date("d/m/Y") }} à {{  piecedetachee.createdAt|date("H:i") }}</p>
         </div>
     </div>
 

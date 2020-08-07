@@ -21,6 +21,7 @@
                         </h5>
                         <p class="card-text text-center">{{ moto.FormattedPrice }}</p>
                         <p>Vendeur : {{ moto.vendeur.username }} </p>
+                        <p>Publiée le : {{ moto.createdAt|date("d/m/Y") }} à {{  moto.createdAt|date("H:i") }}</p>
                         <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
                             <a class="{{ vendeur ? " " : "card-text text-center " }}col-6 "
                                href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a>

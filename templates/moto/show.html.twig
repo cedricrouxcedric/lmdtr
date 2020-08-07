@@ -74,6 +74,7 @@
                     <td>{{ moto.vendeur.username}}</td>
                 </tr>
             </table>
+            <p>Publiée le : {{ moto.createdAt|date("d/m/Y") }} à {{  moto.createdAt|date("H:i") }}</p>
         </div>
     </div>
 

@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Entity\Moto;
 use App\Form\MotoType;
 use App\Repository\MotoRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,6 +124,9 @@ class MotoController extends AbstractController
                     $this->uploadImg($image, $moto);
                 }
                 $moto->setVendeur($user);
+                $createdDate = new DateTime();
+              //  dump($createdDate);die();
+                $moto->setCreatedAt($createdDate);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($moto);
                 $entityManager->flush();

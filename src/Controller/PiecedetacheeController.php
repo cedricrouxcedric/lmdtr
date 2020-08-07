@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Entity\Piecedetachee;
 use App\Form\PiecedetacheeType;
 use App\Repository\PiecedetacheeRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -101,6 +102,8 @@ class PiecedetacheeController extends AbstractController
                 foreach ($images as $image) {
                     $this->uploadImg($image, $piecedetachee);
                 }
+                $createDate = new DateTime();
+                $piecedetachee->setCreatedAt($createDate);
                 $piecedetachee->setVendeur($userInterface);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($piecedetachee);

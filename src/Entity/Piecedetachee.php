@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PiecedetacheeRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,10 +52,20 @@ class Piecedetachee
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="piecedetachee")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="piecedetachees")
      * @ORM\JoinColumn(nullable=false)
      */
     private $vendeur;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated_at;
 
     public function __construct()
     {
@@ -181,5 +192,29 @@ class Piecedetachee
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
     }
 }
