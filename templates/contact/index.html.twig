@@ -20,7 +20,20 @@
     <div class="example-wrapper">
         <h1>Bienvenue sur le formulaire de contact</h1>
         <div class="form-group">
-            {{ form(contactForm) }}
+            {{ form_start(contactForm) }}
+            <div class="row col-3">
+                {{ form_row(contactForm.nom,{'label': 'Votre nom d\'utilisateur', 'attr': {'class': 'foo'}}) }}
+            </div>
+            <div class="row col-3">
+                {{ form_row(contactForm.email) }}
+            </div>
+            <div class="row col-3">
+                {{ form_row(contactForm.message) }}
+            </div>
+            <div class="row col-3 mt-3">
+                {{ form_row(contactForm.envoyer) }}
+            </div>
+            {{ form_end(contactForm) }}
         </div>
     </div>
 {% endblock %}

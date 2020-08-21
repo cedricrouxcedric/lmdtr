@@ -9,7 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\User;
 
 
 /**
@@ -103,9 +105,15 @@ class Moto
      */
     private $updated_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MotoLike::class, mappedBy="moto")
+     */
+    private $likes;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->likes = new ArrayCollection();
 
     }
 
@@ -121,10 +129,10 @@ class Moto
 
     public function getFormattedPrice(): string
     {
-        return number_format($this->prix, 0, '', ' ')." €";
+        return number_format($this->prix, 0, '', ' ') . " €";
     }
 
-     /**
+    /**
      * @param int $prix
      * @return $this
      */
@@ -282,7 +290,7 @@ class Moto
             $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
             if ($image->getMoto() === $this) {
-                $image->setMoto(null);
+                $image->setMoto(NULL);
             }
         }
         return $this;
@@ -328,4 +336,51 @@ class Moto
 
         return $this;
     }
+
+    /**
+     * @return Collection|MotoLike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(MotoLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setMoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(MotoLike $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getMoto() === $this) {
+                $like->setMoto(NULL);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isLikedByUser(UserInterface $user): bool
+    {
+        if ($user) {
+            foreach ($this->likes as $like) {
+                if ($like->getUser() === $user)
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }

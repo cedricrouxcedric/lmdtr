@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ theme.name }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="d-flex justify-content-start">
+            <h1 class="mr-3">{{ theme.name }}</h1>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('themes_edit', {'id': theme.id}) }}">edit</a>
+            {% endif %}
+        </div>
+    </div>
+    <table class="table">
+
+
+        <thead>
+        <tr>
+            <th>Sujet</th>
+            <th class="text-center">Nombre de commentaires</th>
+            <th class="text-center">Derniere contribution</th>
+        </tr>
+        </thead>
+        {% for article in articlesTheme %}
+        <tbody>
+        <tr>
+            <td><a class="text-dark " href="{{ path('articles_theme',{'article' : article.id}) }}">{{ article.titre }}</a></td>
+            <td class="text-center">{{ article.commentaires|length }}</td>
+            {% if ( article.commentaires is not empty ) %}
+                <td class="text-center"> {{ article.commentaires|last.auteur.username }} <br>
+                    {{ article.commentaires|last.createdAt.format("d/m/Y H:i") }}
+                </td>
+            {% else %}
+                <td class="text-center"> {{ article.auteur.username }} <br>
+                    {{ article.createdAt.format("d/m/Y H:i") }}</td>
+            {% endif %}
+
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+    <p>
+        <a href="{{ path('themes_index') }}">Retourner aux themes</a>
+    </p>
+    {% if is_granted('ROLE_SUBSCRIBER') %}
+        <a href="{{ path('articles_new',{'theme' :theme.id}) }}">Creer un nouvel article</a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Vous devez vous connecter pour pouvoir créer un sujet de conversation</a>
+    {% endif %}
+
+{% endblock %}

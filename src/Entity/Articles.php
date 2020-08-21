@@ -26,7 +26,7 @@ class Articles
     private $titre;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $contenu;
 
@@ -57,9 +57,10 @@ class Articles
     private $mots_cles;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Themes::class, inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity=Themes::class, inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $theme;
+    private $themes;
 
     public function __construct()
     {
@@ -190,34 +191,20 @@ class Articles
         return $this;
     }
 
-    /**
-     * @return Collection|Themes[]
-     */
-    public function getTheme(): Collection
-    {
-        return $this->theme;
-    }
-
-    public function addTheme(Themes $theme): self
-    {
-        if (!$this->theme->contains($theme)) {
-            $this->theme[] = $theme;
-        }
-
-        return $this;
-    }
-
-    public function removeTheme(Themes $theme): self
-    {
-        if ($this->theme->contains($theme)) {
-            $this->theme->removeElement($theme);
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return $this->getTitre();
+    }
+
+    public function getThemes(): ?Themes
+    {
+        return $this->themes;
+    }
+
+    public function setThemes(?Themes $themes): self
+    {
+        $this->themes = $themes;
+
+        return $this;
     }
 }

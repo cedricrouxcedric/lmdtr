@@ -6,9 +6,15 @@ use App\Repository\ThemesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ThemesRepository::class)
+ * @UniqueEntity(
+ *     fields={"name"},
+ *     message="{{ value }} est déja un theme utilisé."
+ * )
  */
 class Themes
 {
@@ -20,12 +26,12 @@ class Themes
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Articles::class, mappedBy="theme")
+     * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="themes", orphanRemoval=true)
      */
     private $articles;
 
@@ -63,7 +69,7 @@ class Themes
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->addTheme($this);
+            $article->setThemes($this);
         }
 
         return $this;
@@ -73,9 +79,17 @@ class Themes
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
-            $article->removeTheme($this);
+            // set the owning side to null (unless already changed)
+            if ($article->getThemes() === $this) {
+                $article->setThemes(null);
+            }
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

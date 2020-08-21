@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Images;
 use App\Entity\Moto;
 use App\Form\MotoType;
+use App\Repository\MotoLikeRepository;
 use App\Repository\MotoRepository;
+use App\Entity\MotoLike;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
+use phpDocumentor\Reflection\Types\Null_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,7 +53,7 @@ class MotoController extends AbstractController
         return $result;
     }
 
-    private function uploadImg($image, $moto = null)
+    private function uploadImg($image, $moto = NULL)
     {
         if (!isset($moto)) {
             $moto = new Moto();
@@ -74,9 +78,9 @@ class MotoController extends AbstractController
     {
         $motosAll = $this->MotoRepository->findAll();
         $motos = $paginator->paginate(
-          $motosAll,
-          $request->query->getInt('page', 1),
-          6
+            $motosAll,
+            $request->query->getInt('page', 1),
+            6
         );
         return $this->render('moto/index.html.twig', [
             'motos' => $motos,
@@ -125,7 +129,6 @@ class MotoController extends AbstractController
                 }
                 $moto->setVendeur($user);
                 $createdDate = new DateTime();
-              //  dump($createdDate);die();
                 $moto->setCreatedAt($createdDate);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($moto);
@@ -150,6 +153,7 @@ class MotoController extends AbstractController
         return $this->render('moto/show.html.twig', [
             'moto' => $moto,
         ]);
+
     }
 
     /**
@@ -218,4 +222,56 @@ class MotoController extends AbstractController
             return new JsonResponse(['error' => 'Token Invalide'], 400);
         }
     }
+
+    /**
+     *
+     * @IsGranted("ROLE_SUBSCRIBER")
+     * @Route("/moto/{id}/like", name="moto_like", options={"expose"=true}, methods={"GET","POST"})
+     *
+     * @param Moto $moto
+     * @param EntityManagerInterface $manager
+     * @param MotoLikeRepository $likeRepo
+     * @return Response
+     */
+    public function like(Moto $moto,
+                         EntityManagerInterface $manager,
+                         MotoLikeRepository $likeRepo): Response
+    {
+        $user = $this->getUser();
+        if ($user) {
+            if (!($moto->isLikedByUser($user))) {
+                $like = new MotoLike();
+                $like->setMoto($moto);
+                $like->setUser($user);
+
+                $manager->persist($like);
+
+                $message = "Moto ajoutée à vos favoris";
+            } else {
+                $like = $likeRepo->findOneBy([
+                    'moto' => $moto,
+                    'user' => $user
+                ]);
+
+                $manager->remove($like);
+                $message = "Moto retirée de vos favoris";
+
+            }
+            $manager->flush();
+            return $this->json([
+                'code' => 200,
+                'isliked' => $moto->isLikedByUser($user),
+                'message' => $message,
+                'likes' => $likeRepo->count(['moto' => $moto])
+            ], 200);
+
+        } else {
+            return $this->json([
+                'code'=> 403,
+                'message'=> "Unauthorized"
+            ],403);
+        }
+    }
+
+
 }

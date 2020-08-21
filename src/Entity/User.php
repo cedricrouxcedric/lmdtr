@@ -98,11 +98,17 @@ class User implements UserInterface
      */
     private $articles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MotoLike::class, mappedBy="user")
+     */
+    private $likes;
+
     public function __construct()
     {
         $this->motos = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -392,6 +398,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($article->getAuteur() === $this) {
                 $article->setAuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MotoLike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(MotoLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(MotoLike $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
             }
         }
 

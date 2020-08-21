@@ -13,3 +13,9 @@
         <div>  {{ include('piecedetachee/_delete_form.html.twig', {'button_label': "Supprimer l'annonce."} ) }} </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="{{ asset('js/images.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Themes index{% endblock %}
+
+{% block body %}
+    <h1>Themes index</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center">Sujet</th>
+            <th class="text-center">Nbr de conversations</th>
+            <th class="text-center">Dernier article</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th class="text-center">actions</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for theme in themes %}
+            {% set nbrarticles = theme.articles|length %}
+            <tr>
+                <td class="text-center"><a class="font-weight-bold text-dark" href="{{ path('themes_show', {'name': theme.name}) }}">{{ theme.name }}</a></td>
+                <td class="text-center">{{ nbrarticles }}</td>
+                {% if nbrarticles > 0 %}
+                    <td class="text-center"> {{ theme.articles|last.titre  }}
+                        <br>
+                        {{ theme.articles|last.createdAt.format("d/m/Y H:i") }}
+                        <br>
+                        {{ theme.articles|last.auteur.username  }}
+                    </td>
+                    {% else %}
+                        <td class="text-center">--</td>
+                {% endif %}
+
+
+                {% if (is_granted("ROLE_ADMIN")) %}
+                    <td class="text-center">
+                        <a class="text-center" href="{{ path('themes_show', {'name': theme.name}) }}">show</a>
+                        <a class="text-center" href="{{ path('themes_edit', {'id': theme.id}) }}">edit</a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% else %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if  (is_granted("ROLE_ADMIN")) %}
+        <a href="{{ path('themes_new') }}">Create new</a>
+    {% endif %}
+{% endblock %}
