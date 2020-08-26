@@ -22,7 +22,7 @@
                             Consulte les annonces
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item grey" href="{{ path('moto_index') }}">Moto</a>
+                            <a class="dropdown-item grey" href="{{ path('moto_index') }}">Motos</a>
                             <a class="dropdown-item grey" href="{{ path('piecedetachee_index')}}">Piéces détachées</a>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                                 Depose une annonce
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item grey" href="{{ path('moto_new') }}">Moto</a>
+                                <a class="dropdown-item grey" href="{{ path('moto_new') }}">Motos</a>
                                 <a class="dropdown-item grey" href="{{ path('piecedetachee_new') }}">Piéces détachées</a>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
             <li class="nav-item">
                 <a class="nav-link"
                    href="{{ path('themes_index') }}">
-                    Discute
+                    Forum
                 </a>
             </li>
             <li class="nav-item">
@@ -85,7 +85,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link">  {{ app.user.username}}</p>
+                        <a href="{{ path('user_show', {'id': app.user.id}) }}">
+                        <p class="nav-link">  {{ app.user.username}}</p></a>
                     </li>
                 {% endif %}
             </div>

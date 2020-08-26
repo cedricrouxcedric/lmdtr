@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Articles;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,6 +22,21 @@ class ArticlesRepository extends ServiceEntityRepository
     public function findAll()
     {
         return $this->findBy(array(), array('created_at' => 'DESC'));
+    }
+
+    public function createdByOrderByDate(User $user)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->addSelect('at')
+            ->addSelect('ac')
+            ->leftJoin('a.commentaires','ac')
+            ->leftJoin('a.themes','at')
+            ->where('a.auteur = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.created_at','desc')
+            ->getQuery()
+            ->execute();
+        return $query;
     }
 
     // /**

@@ -50,8 +50,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">
+        <div class="container">
             <table class="table table-striped">
                 <tr>
                     <td>Categorie</td>
@@ -103,7 +102,7 @@
                         {% endif %}>
             {% endif %}
         </div>
-    </div>
+
 
     {% if  (is_granted("ROLE_SUBSCRIBER")) %}
         {% if ( moto.vendeur != app.user ) %}

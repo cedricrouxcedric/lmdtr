@@ -23,8 +23,8 @@
                 <td>{{ commentaire.actif ? 'Yes' : 'No' }}</td>
                 <td>{{ commentaire.createdAt ? commentaire.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('commentaires_show', {'id': commentaire.id}) }}">show</a>
-                    <a href="{{ path('commentaires_edit', {'id': commentaire.id}) }}">edit</a>
+                    <a href="{{ path('commentaires_show', {'id': commentaire.id}) }}">Lire commentaire</a>
+                    <a href="{{ path('commentaires_edit', {'id': commentaire.id}) }}">Editer commentaire</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,4 @@
         </tbody>
     </table>
 
-{#    <a href="{{ path('commentaires_new') }}">Create new</a>#}
 {% endblock %}

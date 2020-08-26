@@ -18,6 +18,7 @@ class CategorieFixtures extends Fixture implements FixtureGroupInterface
         'Roadster',
         'Cruiser',
         'Motocross',
+        'Scooter',
         'Super Motard',
     ];
 

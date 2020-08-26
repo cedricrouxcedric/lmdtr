@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Articles;
+use App\Entity\User;
 use App\Entity\Commentaires;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +21,21 @@ class CommentairesRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentaires::class);
     }
 
+    public function findComAndDataByUser(User $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->addSelect('a')
+            ->addSelect('t')
+            ->leftJoin('c.articles','a')
+            ->leftJoin('a.themes','t')
+            ->where('c.auteur = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+        return $queryBuilder;
+    }
 
+//    }
 //    /**
 //
 //      * @return Commentaires[] Returns an array of Commentaires objects

@@ -41,8 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">
+    <div class="container">
             <table class="table table-striped">
                 <tr>
                     <td>Piece</td>
@@ -70,7 +69,6 @@
                 </tr>
             </table>
             <p>Publiée le : {{ piecedetachee.createdAt|date("d/m/Y") }} à {{  piecedetachee.createdAt|date("H:i") }}</p>
-        </div>
     </div>
 
     {% if  is_granted("ROLE_SUBSCRIBER")%}

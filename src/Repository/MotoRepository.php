@@ -6,6 +6,7 @@ use App\Entity\Moto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Moto|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,6 +42,31 @@ class MotoRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('m')
             ->where('m.sold = false');
+    }
+
+    public function getFavoritesByUser(UserInterface $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('m')
+            ->leftJoin('m.marque','mm')
+            ->addSelect('mm')
+            ->innerJoin('m.likes','ml')
+            ->where('ml.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+        return $queryBuilder;
+    }
+
+    public function getForSaleByUser(UserInterface $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('m')
+            ->addSelect('mm')
+            ->leftJoin('m.marque','mm')
+            ->where('m.vendeur = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+        return $queryBuilder;
     }
     // /**
     //  * @return Moto[] Returns an array of Moto objects

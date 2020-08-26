@@ -24,10 +24,13 @@
                 <td>{{ article.contenu }}</td>
                 <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('articles_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('articles_edit', {'id': article.id}) }}">edit</a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('articles_show', {'id': article.id}) }}">Voir l'article</a>
+                        <a href="{{ path('articles_edit', {'id': article.id}) }}">Editer l'article</a>
+                    </td>
+                {% endif %}
+
             </tr>
         {% else %}
             <tr>

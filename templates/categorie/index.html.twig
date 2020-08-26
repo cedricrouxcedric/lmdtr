@@ -19,8 +19,8 @@
                 <td>{{ categorie.id }}</td>
                 <td>{{ categorie.name }}</td>
                 <td>
-                    <a href="{{ path('categorie_show', {'id': categorie.id}) }}">show</a>
-                    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">edit</a>
+                    <a href="{{ path('categorie_show', {'id': categorie.id}) }}">Voir la catégorie</a>
+                    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">Editer la catégorie</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('categorie_new') }}">Create new</a>
+    <a href="{{ path('categorie_new') }}">Ajouter une catégorie</a>
 {% endblock %}

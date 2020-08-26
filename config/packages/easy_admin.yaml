@@ -23,7 +23,7 @@ easy_admin:
                   - { entity: 'articles', label: 'Articles forum', icon: 'tag' }
                   - { entity: 'commentaires', label: 'Commentaires', icon: 'tag' }
                   - { entity: 'mots_clé', label: 'Mots_clés', icon: 'tag' }
-                  - { entity: 'themes', label: 'Thémes', icon: 'tag' }
+                  - { entity: 'themes', label: 'Thèmes', icon: 'tag' }
 
 
     formats:

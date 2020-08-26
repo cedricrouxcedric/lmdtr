@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Piecedetachee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Piecedetachee|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,6 +24,18 @@ class PiecedetacheeRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('created_at' => 'DESC'));
     }
 
+    public function getForSaleByUser(UserInterface $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->addSelect('pm')
+            ->leftJoin('p.marque','pm')
+            ->leftJoin('p.vendeur','pv')
+            ->where('pv = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+        return $queryBuilder;
+    }
     // /**
     //  * @return Piecedetachee[] Returns an array of Piecedetachee objects
     //  */

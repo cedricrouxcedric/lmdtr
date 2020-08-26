@@ -7,10 +7,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method MotoLike|null find($id, $lockMode = null, $lockVersion = null)
- * @method MotoLike|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MotoLike|null find($id, $lockMode = NULL, $lockVersion = NULL)
+ * @method MotoLike|null findOneBy(array $criteria, array $orderBy = NULL)
  * @method MotoLike[]    findAll()
- * @method MotoLike[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MotoLike[]    findBy(array $criteria, array $orderBy = NULL, $limit = NULL, $offset = NULL)
  */
 class MotoLikeRepository extends ServiceEntityRepository
 {

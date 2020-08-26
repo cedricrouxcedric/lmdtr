@@ -139,8 +139,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = ' ';
 
         return array_unique($roles);
     }
@@ -157,7 +156,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -252,7 +251,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        return null;
+        return NULL;
     }
 
     /**
@@ -288,7 +287,7 @@ class User implements UserInterface
             $this->motos->removeElement($moto);
             // set the owning side to null (unless already changed)
             if ($moto->getVendeur() === $this) {
-                $moto->setVendeur(null);
+                $moto->setVendeur(NULL);
             }
         }
         return $this;
@@ -318,7 +317,7 @@ class User implements UserInterface
             $this->piecedetachees->removeElement($piecedetachee);
             // set the owning side to null (unless already changed)
             if ($piecedetachee->getVendeur() === $this) {
-                $piecedetachee->setVendeur(null);
+                $piecedetachee->setVendeur(NULL);
             }
         }
         return $this;
@@ -354,7 +353,7 @@ class User implements UserInterface
             $this->commentaires->removeElement($commentaire);
             // set the owning side to null (unless already changed)
             if ($commentaire->getAuteur() === $this) {
-                $commentaire->setAuteur(null);
+                $commentaire->setAuteur(NULL);
             }
         }
 
@@ -397,7 +396,7 @@ class User implements UserInterface
             $this->articles->removeElement($article);
             // set the owning side to null (unless already changed)
             if ($article->getAuteur() === $this) {
-                $article->setAuteur(null);
+                $article->setAuteur(NULL);
             }
         }
 
@@ -428,10 +427,43 @@ class User implements UserInterface
             $this->likes->removeElement($like);
             // set the owning side to null (unless already changed)
             if ($like->getUser() === $this) {
-                $like->setUser(null);
+                $like->setUser(NULL);
             }
         }
 
         return $this;
     }
+
+    public function getRoleString()
+    {
+        $roles = $this->getRoles();
+        if (in_array('ROLE_USER', $roles)) {
+            $role = 1;
+        }
+        if (in_array('ROLE_SUBSCRIBER', $roles)) {
+            $role = 2;
+        }
+        if (in_array('ROLE_ADMIN', $roles)) {
+            $role = 3;
+        }
+        if (in_array('ROLE_SUPERADMIN', $roles)) {
+            $role = 4;
+        }
+        switch ($role) {
+            case 1:
+                $role = "Sac de sable";
+                break;
+            case 2:
+                $role = "Motard";
+                break;
+            case 3:
+                $role = "Pilote";
+                break;
+            case 4:
+                $role = "Force de l'ordre";
+                break;
+        }
+        return ($role);
+    }
+
 }
