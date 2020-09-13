@@ -31,6 +31,11 @@ class MotoController extends AbstractController
     private $repository;
 
     /**
+     * @var MotoRepository
+     */
+    private $MotoRepository;
+
+    /**
      * MotoController constructor.
      * @param MotoRepository $repository
      */
@@ -114,11 +119,13 @@ class MotoController extends AbstractController
      * @Route("/moto/new", name="moto_new", methods={"GET","POST"})
      */
     public function new(Request $request,
-                        UserInterface $user): Response
+                        UserInterface $user,
+                        ContactController $contactController): Response
     {
         $moto = new Moto();
         $form = $this->createForm(MotoType::class, $moto);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Récuperation des images transmises
             $images = $form->get('images')->getData();
@@ -128,12 +135,14 @@ class MotoController extends AbstractController
                     $this->uploadImg($image, $moto);
                 }
                 $moto->setVendeur($user);
+                $moto->setConfirmationCode(md5(uniqid()));
+                $moto->setValidate(false);
                 $createdDate = new DateTime();
                 $moto->setCreatedAt($createdDate);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($moto);
                 $entityManager->flush();
-                $this->addFlash('success', 'Annonce Ajoutée sur le site');
+                $contactController->sendNewMotoConfirmation($user,$moto);
                 return $this->redirectToRoute('moto_index');
             }
             $this->addFlash('error', "Les photos ne respectent pas le format requis");
@@ -195,6 +204,13 @@ class MotoController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $moto->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $likes = $moto->getLikes();
+            $motoLikeRepo = $entityManager->getRepository(MotoLike::class);
+            foreach ($likes as $like){
+                $motoLike = $motoLikeRepo->findOneBy(['moto'=> $like->getMoto()]);
+                $moto->removeLike($like);
+                $entityManager->remove($motoLike);
+            }
             $entityManager->remove($moto);
             $entityManager->flush();
         }

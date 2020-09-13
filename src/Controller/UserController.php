@@ -70,7 +70,6 @@ class UserController extends AbstractController
         $articleCreated = $articlesRepository->createdByOrderByDate($user);
         $commentaires = $commentairesRepository->findComAndDataByUser($user);
         $pieces = $piecedetacheeRepository->getForSaleByUser($user);
-        dump($pieces);
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'favorites' => $favorites,
@@ -104,8 +103,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_SUPERADMIN")
-     * @Route("/{id}/delete", name="user_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/{id}/delete", name="user_delete",methods={"DELETE"})
      */
     public function delete(Request $request,
                            User $user): Response

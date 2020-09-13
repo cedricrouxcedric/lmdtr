@@ -86,6 +86,13 @@ class Moto
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @Assert\Range(
+     *      min = 50,
+     *      max = 2500,
+     *      minMessage = "La cylindrée minimum est {{ limit }}cc",
+     *      maxMessage = "La cylindrée max est { limit }}cc"
+     * )
      */
     private $cylindree;
 
@@ -109,6 +116,21 @@ class Moto
      * @ORM\OneToMany(targetEntity=MotoLike::class, mappedBy="moto")
      */
     private $likes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $confirmation_code;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validate;
 
     public function __construct()
     {
@@ -381,6 +403,42 @@ class Moto
             }
         }
         return false;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getConfirmationCode(): ?string
+    {
+        return $this->confirmation_code;
+    }
+
+    public function setConfirmationCode(?string $confirmation_code): self
+    {
+        $this->confirmation_code = $confirmation_code;
+
+        return $this;
+    }
+
+    public function getValidate(): ?bool
+    {
+        return $this->validate;
+    }
+
+    public function setValidate(bool $validate): self
+    {
+        $this->validate = $validate;
+
+        return $this;
     }
 
 }

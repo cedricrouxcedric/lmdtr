@@ -7,6 +7,8 @@ use App\Form\ChangePassType;
 use App\Form\RegistrationType;
 use App\Form\ResetPassType;
 use App\Form\ValidationCodeType;
+use App\Repository\MotoRepository;
+use App\Repository\PiecedetacheeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -152,6 +154,48 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/activationmoto/{token}",name="activation_moto")
+     */
+
+     public function activationMoto($token,
+                                    MotoRepository $motoRepository)
+     {
+         $moto = $motoRepository->findOneBy(['confirmation_code'=> $token]);
+         if (!$moto) {
+             throw $this->createNotFoundException('Cette annonce n\'existe pas ');
+         }
+         $moto->setConfirmationCode(NULL);
+         $moto->setValidate(true);
+         $em = $this->getDoctrine()->getManager();
+         $em->persist($moto);
+         $em->flush();
+
+         $this->addFlash('success', "Votre annonce vient d'etre validée");
+         return $this->redirectToRoute('moto_index');
+     }
+
+    /**
+     * @Route("/activationpiece/{token}", name="activation_piece")
+     */
+
+    public function activationPiece($token,
+                                    PiecedetacheeRepository $piecedetacheeRepository)
+    {
+        $piece = $piecedetacheeRepository->findOneBy(['confirmation_code'=> $token]);
+        if(!$piece) {
+            throw $this->createNotFoundException('Cette annonce n\'existe pas ');
+        }
+        $piece->setConfirmationCode(NULL);
+        $piece->setValidate(true);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($piece);
+        $em->flush();
+
+        $this->addFlash('success', "Votre annonce vient d'etre validée");
+        return $this->redirectToRoute('piecedetachee_index');
+    }
+
+     /**
      * @Route ("/oubli-mdp", name="app_forgot_password")
      */
     public function forgottenPassword(Request $request,

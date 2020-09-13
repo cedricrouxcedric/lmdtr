@@ -3,9 +3,10 @@
 {% block title %}Edit Commentaires{% endblock %}
 
 {% block body %}
-    <h1>Edit Commentaires</h1>
+    <h1>Editer un commentaire</h1>
 
-    {{ include('commentaires/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('commentaires/_form.html.twig', {'button_label': 'Mettre le commentaire à jour'}) }}
+
 
     <a href="{{ path('commentaires_index') }}">back to list</a>
 

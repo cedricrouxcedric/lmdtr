@@ -5,8 +5,9 @@
 {% block body %}
     <div class="d-flex justify-content-between">
         <div class="d-flex">
-            <h1>Profil de {{ user.username }}</h1>{% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+            <h1>Profil de {{ user.username }}</h1>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
             {% endif %}</div>
         <h3 class="m-3">
             <a class="text-dark" href="{{ path('user_index') }}">Liste des utilisateurs</a>
@@ -32,8 +33,8 @@
             <td>{{ user.validateAccount ? 'Oui' : 'Non' }}</td>
         </tr>
         <tr>
-            <th>Rgpd accepté</th>
-            <td>{{ user.rgpd ? 'Oui' : 'Non' }}</td>
+            <th>cgu acceptées</th>
+            <td>{{ user.cgu ? 'Oui' : 'Non' }}</td>
         </tr>
         </tbody>
     </table>
@@ -166,38 +167,42 @@
             </tbody>
         </table>
     </div>
-    <div id="commentaires">
-    <h2>Commentaires postés par {{ user.username }}</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th class="text-center" scope="col">#</th>
-            <th class="text-center" scope="col">Theme</th>
-            <th class="text-center" scope="col">Article</th>
-            <th class="text-center" scope="col">Contenu</th>
-            <th class="text-center" scope="col">Date de publication</th>
-            <th class="text-center" scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for commentaire in commentaires %}
+    <div id="commentairesBlock">
+        <h2>Commentaires postés par {{ user.username }}</h2>
+        <table class="table">
+            <thead>
             <tr>
-                <th class="text-center" scope="row">{{ loop.index }}</th>
-                <td class="text-center">{{ commentaire.articles.themes.name }}</td>
-                <td class="text-center">{{ commentaire.articles.titre }}</td>
-                <td class="text-center">{{ commentaire.contenu }}</td>
-                <td class="text-center">{{ commentaire.createdAt|date('Y-m-d H:i:s') }}</td>
-                <td class="text-center">
-                    <a class="btn btn-dark"
-                       href="{{ path('articles_show',{id: commentaire.articles.id}) }}">
-                        voir
-                    </a>
-                </td>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Theme</th>
+                <th class="text-center" scope="col">Article</th>
+                <th class="text-center" scope="col">Contenu</th>
+                <th class="text-center" scope="col">Date de publication</th>
+                <th class="text-center" scope="col">Action</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for commentaire in commentaires %}
+                <tr>
+                    <th class="text-center" scope="row">{{ loop.index }}</th>
+                    <td class="text-center">{{ commentaire.articles.themes.name }}</td>
+                    <td class="text-center">{{ commentaire.articles.titre }}</td>
+                    <td class="text-center">{{ commentaire.contenu }}</td>
+                    <td class="text-center">{{ commentaire.createdAt|date('Y-m-d H:i:s') }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-dark"
+                           href="{{ path('articles_show',{id: commentaire.articles.id}) }}">
+                            voir
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
     </div>
+    {% if is_granted('ROLE_SUPERADMIN') or (app.user == user) %}
+        <div>{{ include('user/_delete_form.html.twig') }}</div>
+    {% endif %}
 {% endblock %}
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}

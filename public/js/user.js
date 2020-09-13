@@ -10,6 +10,6 @@ $(function () {
     hideOrSeeInfos($('#motosfavorites'),$('#favoritesliste'));
     hideOrSeeInfos($('#piecesenventes'),$('#annoncespieces'));
     hideOrSeeInfos($('#sujetouverts'),$('#sujet'));
-    hideOrSeeInfos($('#commentaireposte'),$('#commentaires'));
+    hideOrSeeInfos($('#commentaireposte'),$('#commentairesBlock'));
 
 });

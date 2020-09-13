@@ -1,27 +1,29 @@
-
 {% if (article.commentaires.count > 0) %}
     <div class="table">
 
-                {% for commmentaire in comments %}
-        <div class="row justify-content-center">
-                        <div class="card col-11 m-1 p-2" >
-                            <div class="card-header">
-                                {{ commmentaire.auteur }} dit :
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">{{ commmentaire.contenu }}</li>
-                            </ul>
-                            <div class="card-footer">
-                                {{ commmentaire.createdAt|date('Y-m-d H:i:s') }}
-                            </div>
-                        </div>
+        {% for commmentaire in comments %}
+            <div class="row justify-content-center">
+                <div class="card col-11 m-1 p-2">
+                    <div class="card-header d-flex justify-content-between">
+                        {{ commmentaire.auteur }} dit :
+                        {% if app.user == commmentaire.auteur or is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-danger" href="{{ path('commentaires_edit',{'id': commmentaire.id}) }}">Editer le commentaire</a>
+                        {% endif %}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class= "list-group-item {{ commmentaire.actif ?  : 'text-danger'}}">{{ commmentaire.actif ? commmentaire.contenu : "Commentaire désactivé" }}</li>
+                    </ul>
+                    <div class="card-footer">
+                        {{ commmentaire.createdAt|date('Y-m-d H:i:s') }}
+                    </div>
+                </div>
 
-        </div>
-                {% endfor %}
             </div>
-        <div class="navigation">
-            {{ knp_pagination_render(comments) }}
-        </div>
+        {% endfor %}
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(comments) }}
+    </div>
     </div>
 
 {% endif %}

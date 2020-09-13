@@ -13,7 +13,7 @@ class CommentairesType extends AbstractType
     {
         $builder
             ->add('contenu')
-            ->add('actif')
+            ->add('actif',null,['label'=> 'Commentaire visible'])
         ;
     }
 

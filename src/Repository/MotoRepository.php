@@ -22,7 +22,7 @@ class MotoRepository extends ServiceEntityRepository
 
     public function findAll()
     {
-        return $this->findBy(array(), array('created_at' => 'DESC'));
+        return $this->findBy(array('validate'=>1), array('created_at' => 'DESC'));
     }
 
     public function findAllStillOnSale() {

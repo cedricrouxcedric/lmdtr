@@ -53,7 +53,19 @@
                 </tr>
                 <tr>
                     <td>Modele de moto</td>
-                    <td>{{ piecedetachee.model }} cc</td>
+                    <td>{{ piecedetachee.model }}</td>
+                </tr>
+                <tr>
+                    <td>Cylindrée de la moto</td>
+                    <td>{{ piecedetachee.cylindreemoto }} cc</td>
+                </tr>
+                <tr>
+                    <td>Année moto</td>
+                    <td>{{ piecedetachee.anneemoto }}</td>
+                </tr>
+                <tr>
+                    <td>Taux d'usure</td>
+                    <td>{{ piecedetachee.usure }} %</td>
                 </tr>
                 <tr>
                     <td>description</td>
@@ -73,10 +85,11 @@
 
     {% if  is_granted("ROLE_SUBSCRIBER")%}
     {% if ( piecedetachee.vendeur != app.user ) %}
-        <a href="{{ path('contact_vendeur',{'piece': piecedetachee.id}) }}" class="btn btn-primary ">Contacter le vendeur</a>
+        <a href="{{ path('contact_vendeur_piece',{'piece': piecedetachee.id}) }}" class="btn btn-primary ">Contacter le vendeur</a>
     {% endif %}
     {% else %}
-        <a href="{{ path('app_login') }}">Vous devez valider votre compte pour pouvoir contacter le vendeur</a>
+        <a class="ml-4 text-danger font-weight-bold textneedco"
+           href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir contacter le vendeur</a>
     {% endif %}
     <div class="text-primary pt-0 text-right" style="font-size: 3rem; font-weight: bold">{{ piecedetachee.formattedPrice }}</div>
     <div>

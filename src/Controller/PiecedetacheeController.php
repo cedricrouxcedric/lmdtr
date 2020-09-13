@@ -28,6 +28,11 @@ class PiecedetacheeController extends AbstractController
     private $repository;
 
     /**
+     * @var PiecedetacheeRepository
+     */
+    private $PiecedetacheeRepository;
+
+    /**
      * PiecedetacheeController constructor.
      * @param PiecedetacheeRepository $repository
      */
@@ -74,9 +79,9 @@ class PiecedetacheeController extends AbstractController
                           PaginatorInterface $paginator,
                           Request $request): Response
     {
-        $pieceAll = $this->PiecedetacheeRepository->findAll();
+        $pieceAllValidate = $this->PiecedetacheeRepository->findBy(array('validate'=>1), array('created_at' => 'DESC'));
         $piecedetachees = $paginator->paginate(
-            $pieceAll,
+            $pieceAllValidate,
             $request->query->getInt('page', 1),
             6
         );
@@ -88,13 +93,16 @@ class PiecedetacheeController extends AbstractController
     /**
      * @Route("/new", name="piecedetachee_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserInterface $userInterface): Response
+    public function new(Request $request,
+                        UserInterface $user,
+                        ContactController $contactController): Response
     {
         $piecedetachee = new Piecedetachee();
         $form = $this->createForm(PiecedetacheeType::class, $piecedetachee);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             // Récuperation des images transmises
             $images = $form->get('images')->getData();
             if ($this->checkExt($images)) {
@@ -103,13 +111,17 @@ class PiecedetacheeController extends AbstractController
                     $this->uploadImg($image, $piecedetachee);
                 }
                 $createDate = new DateTime();
+                $piecedetachee->setVendeur($user);
+                $piecedetachee->setConfirmationCode(md5(uniqid()));
+                $piecedetachee->setValidate(false);
                 $piecedetachee->setCreatedAt($createDate);
-                $piecedetachee->setVendeur($userInterface);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($piecedetachee);
                 $entityManager->flush();
+                $contactController->sendNewPiecedetacheeConfirmation($user, $piecedetachee);
+                return $this->redirectToRoute('piecedetachee_index');
             }
-            return $this->redirectToRoute('piecedetachee_index');
+            $this->addFlash('error', "Les photos ne respectent pas le format requis");
         }
 
         return $this->render('piecedetachee/new.html.twig', [

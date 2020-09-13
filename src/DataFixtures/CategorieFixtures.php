@@ -20,6 +20,9 @@ class CategorieFixtures extends Fixture implements FixtureGroupInterface
         'Motocross',
         'Scooter',
         'Super Motard',
+        'Enduro',
+        'Piste',
+        'Café Racer',
     ];
 
     public function load(ObjectManager $manager)

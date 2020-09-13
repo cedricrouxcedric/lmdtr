@@ -14,6 +14,8 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"
+            integrity="sha512-7o2DtaB6EuAwjOyn86v4QEHQFNBXJ0jsln5kr3mvbxI7bCM1z1potVUcwoBCt4KNAQhw7VSmnIDp6EOhxNIzzw=="
+            crossorigin="anonymous"></script>
     <script src="{{ asset('js/images.js') }}"></script>
 {% endblock %}

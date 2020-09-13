@@ -26,7 +26,7 @@ class UserType extends AbstractType
                 )
                 ])
             ->add('validateAccount')
-            ->add('rgpd')
+            ->add('cgu')
         ;
     }
 

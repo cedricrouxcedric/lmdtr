@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PiecedetacheeRepository::class)
@@ -66,6 +67,38 @@ class Piecedetachee
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @Assert\Range(
+     *      min = 50,
+     *      max = 6200,
+     *      minMessage = "La cylindrée minimum est {{ limit }}cc",
+     *      maxMessage = "La cylindrée max est { limit }}cc"
+     * )
+     */
+    private $cylindreemoto;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $usure;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $anneemoto;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $confirmation_code;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validate;
 
     public function __construct()
     {
@@ -214,6 +247,66 @@ class Piecedetachee
     public function setUpdatedAt(?DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getCylindreemoto(): ?string
+    {
+        return $this->cylindreemoto;
+    }
+
+    public function setCylindreemoto(string $cylindreemoto): self
+    {
+        $this->cylindreemoto = $cylindreemoto;
+
+        return $this;
+    }
+
+    public function getUsure(): ?int
+    {
+        return $this->usure;
+    }
+
+    public function setUsure(int $usure): self
+    {
+        $this->usure = $usure;
+
+        return $this;
+    }
+
+    public function getAnneemoto(): ?int
+    {
+        return $this->anneemoto;
+    }
+
+    public function setAnneemoto(int $anneemoto): self
+    {
+        $this->anneemoto = $anneemoto;
+
+        return $this;
+    }
+
+    public function getConfirmationCode(): ?string
+    {
+        return $this->confirmation_code;
+    }
+
+    public function setConfirmationCode(?string $confirmation_code): self
+    {
+        $this->confirmation_code = $confirmation_code;
+
+        return $this;
+    }
+
+    public function getValidate(): ?bool
+    {
+        return $this->validate;
+    }
+
+    public function setValidate(bool $validate): self
+    {
+        $this->validate = $validate;
 
         return $this;
     }

@@ -73,8 +73,12 @@
                     <td>{{ moto.din }} / {{ moto.fisc }}</td>
                 </tr>
                 <tr>
-                    <td>Moto compatible a2</td>
+                    <td>Moto bridable</td>
                     <td>{{ moto.a2 ? "Oui" : "Non" }}</td>
+                </tr>
+                <tr>
+                    <td>Description par le vendeur</td>
+                    <td>{{ moto.description }}</td>
                 </tr>
                 <tr>
                     <td>Vendeur</td>
@@ -114,17 +118,18 @@
             </div>
         {% endif %}
     {% else %}
-        <a href="{{ path('app_login') }}">Vous devez valider votre compte pour pouvoir contacter le vendeur</a>
+        <a class="ml-4 text-danger font-weight-bold textneedco"
+           href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir contacter le vendeur</a>
     {% endif %}
     <div class="text-primary pt-0 text-right"
          style="font-size: 3rem;
          font-weight: bold;">{{ moto.formattedPrice }}</div>
     <div>
-        <a class="btn btn-dark" href="{{ path('moto_index') }}">Retourner à liste des motos d'occasion</a>
+        <a class="btn btn-dark ml-4" href="{{ path('moto_index') }}">Retourner à liste des motos d'occasion</a>
     </div>
     {% if vendeuroradmin %}
         <div>
-            <a class="btn btn-danger my-3" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
+            <a class="btn btn-danger my-3 ml-4" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
         </div>
     {% endif %}
     </div>

@@ -1,0 +1,64 @@
+<style type="text/css">
+    .container{
+        display: flex;
+        flex-direction: column;
+    }
+
+    img{
+        width: 400px;
+        margin: 1em;
+    }
+</style>
+<h1>Confirmation de creation de votre annonce</h1>
+<p>Bonjour {{ user.username }}</p>
+<p>Vous recevez cet email car vous etes sur le point de deposer une annonce pour vendre une moto
+    sur lesmotardsdetaregion .</p>
+<p>Vous avez créé l'annonce suivante</p>
+<table>
+    <thead>
+    <tr>
+        <th colspan="2" style="border: black solid 1px">{{ moto.marque }} : {{ moto.model }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th style="border: black solid 1px">Categorie</th>
+        <th style="border: black solid 1px">{{ moto.categorie }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Cylindrée</th>
+        <th style="border: black solid 1px">{{ moto.cylindree }} cc</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Année</th>
+        <th style="border: black solid 1px">{{ moto.year }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Kilometrage</th>
+        <th style="border: black solid 1px">{{ moto.kilometrage }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Puissance Din/Fiscal</th>
+        <th style="border: black solid 1px">{{ moto.din }} / {{ moto.fisc }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Moto bridable</th>
+        <th style="border: black solid 1px">{{ moto.a2 ? "Oui" : "Non" }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Description</th>
+        <th style="border: black solid 1px">{{ moto.description }}</th>
+    </tr>
+    <tr>
+        <th style="border: black solid 1px">Prix</th>
+        <th style="border: black solid 1px">{{ moto.formattedprice }}</th>
+    </tr>
+    </tbody>
+</table>
+<div class="container">
+{% for image in imagesstr %}
+    <img src="{{ image }}"
+         alt="Image">
+{% endfor %}
+</div>
+<p><a href="{{ absolute_url(path('activation_moto',{'token': moto.confirmationCode})) }}">veuillez cliquer sur ce lien afin de valider votre annonce</a></p>

@@ -24,7 +24,7 @@ class Images
 
     /**
      * @ORM\ManyToOne(targetEntity=Moto::class, inversedBy="images")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn (name="moto",referencedColumnName="id", onDelete="CASCADE")
      */
     private $moto;
 

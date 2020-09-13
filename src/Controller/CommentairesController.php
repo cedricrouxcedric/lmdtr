@@ -6,6 +6,7 @@ use App\Entity\Commentaires;
 use App\Form\CommentairesType;
 use App\Repository\ArticlesRepository;
 use App\Repository\CommentairesRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class CommentairesController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_SUBSCIBER")
      * @Route("/article/{article}", name="commentaires_new", methods={"GET","POST"})
      */
     public function new(Request $request, ArticlesRepository $articlesRepository, UserInterface $user): Response
@@ -44,6 +46,7 @@ class CommentairesController extends AbstractController
 
             $commentaire->setArticles($article);
             $commentaire->setAuteur($user);
+            $commentaire->setActif(true);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($commentaire);
             $entityManager->flush();
@@ -68,17 +71,17 @@ class CommentairesController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/{id}/edit", name="commentaires_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Commentaires $commentaire): Response
     {
         $form = $this->createForm(CommentairesType::class, $commentaire);
         $form->handleRequest($request);
-
+        $articleId = $commentaire->getArticles()->getId();
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('commentaires_index');
+            return $this->redirectToRoute('articles_show',array('id'=>$articleId));
         }
 
         return $this->render('commentaires/edit.html.twig', [

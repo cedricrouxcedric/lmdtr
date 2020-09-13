@@ -91,7 +91,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $rgpd = false;
+    private $cgu = false;
 
     /**
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="auteur", orphanRemoval=true)
@@ -99,7 +99,7 @@ class User implements UserInterface
     private $articles;
 
     /**
-     * @ORM\OneToMany(targetEntity=MotoLike::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=MotoLike::class, mappedBy="user", orphanRemoval=true)
      */
     private $likes;
 
@@ -360,14 +360,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRgpd(): ?bool
+    public function getCgu(): ?bool
     {
-        return $this->rgpd;
+        return $this->cgu;
     }
 
-    public function setRgpd(bool $rgpd): self
+    public function setCgu(bool $cgu): self
     {
-        $this->rgpd = $rgpd;
+        $this->cgu = $cgu;
 
         return $this;
     }

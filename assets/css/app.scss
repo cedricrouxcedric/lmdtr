@@ -85,11 +85,11 @@ a {
   margin-inline: 0.25rem;
 }
 
-.dropdown:hover>.dropdown-menu {
+.dropdown:hover > .dropdown-menu {
   display: block;
 }
 
-.dropdown>.dropdown-toggle:active {
+.dropdown > .dropdown-toggle:active {
   /*Without this, clicking will make it sticky*/
   pointer-events: none;
 }
@@ -98,6 +98,7 @@ a {
   background-color: #313131;
   margin: 0;
   border: black 1px solid;
+
   &:hover {
     color: black;
     background-color: grey;
@@ -112,18 +113,28 @@ a {
   color: gray;
 }
 
-#annoncesmoto{
+#annoncesmoto {
   display: none;
 }
 
-#annoncespieces{
+#annoncespieces {
   display: none;
 }
 
-#sujet{
+#sujet {
   display: none;
 }
 
-#commentaires{
+#commentairesBlock {
   display: none;
+}
+
+.cylindreInput {
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+
+.textneedco {
+  font-size: 1.5em;
 }

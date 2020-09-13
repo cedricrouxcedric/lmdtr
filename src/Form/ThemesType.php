@@ -13,7 +13,7 @@ class ThemesType extends AbstractType
     {
         $builder
             ->add('name',null,[
-                'label'=> 'Sujet'
+                'label'=> 'Sujet : '
             ])
         ;
     }

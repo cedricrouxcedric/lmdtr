@@ -19,6 +19,7 @@ class MotoLike
 
     /**
      * @ORM\ManyToOne(targetEntity=Moto::class, inversedBy="likes")
+     * @ORM\JoinColumn (name="moto",referencedColumnName="id", onDelete="CASCADE")
      */
     private $moto;
 
