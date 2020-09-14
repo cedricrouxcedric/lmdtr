@@ -12,6 +12,8 @@ use App\Repository\MotoLikeRepository;
 use App\Repository\MotoRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -81,25 +83,45 @@ class UserController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
     public function edit(Request $request,
                          User $user): Response
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        if ($user === $this->getUser() or $this->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(UserType::class, $user);
+            if ($user === $this->getUser()) {
+                $form->add('phonenumber', TelType::class,['label' => 'Numéro de telephone'])
+                     ->add('isdisplayphonenumberonprofil',null,['label'=>"Affichage de mon telephone sur mon profil"]);
+            }
+            if ($this->isGranted('ROLE_ADMIN')){
+                $form ->add('roles', ChoiceType::class, [
+                    'label'      => 'Role ',
+                    'expanded' => true,
+                    'multiple'=> true,
+                    'choices' => array(
+                        'Sac de sable' => 'ROLE_USER',
+                        'Motard' => 'ROLE_SUBSCRIBER',
+                        'Pilote' => 'ROLE_ADMIN',
+                    )
+                ]);
+            }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+                return $this->redirectToRoute('user_index');
+            }
+
+            return $this->render('user/edit.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
         }
-
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        $this->addFlash('error','Vous ne pouvez pas faire ça ');
+        return $this->redirectToRoute('user_index');
     }
 
     /**

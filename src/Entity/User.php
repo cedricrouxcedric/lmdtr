@@ -103,6 +103,16 @@ class User implements UserInterface
      */
     private $likes;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $phonenumber;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isdisplayphonenumberonprofil;
+
     public function __construct()
     {
         $this->motos = new ArrayCollection();
@@ -464,6 +474,30 @@ class User implements UserInterface
                 break;
         }
         return ($role);
+    }
+
+    public function getPhonenumber(): ?string
+    {
+        return $this->phonenumber;
+    }
+
+    public function setPhonenumber(?string $phonenumber): self
+    {
+        $this->phonenumber = $phonenumber;
+
+        return $this;
+    }
+
+    public function getIsdisplayphonenumberonprofil(): ?bool
+    {
+        return $this->isdisplayphonenumberonprofil;
+    }
+
+    public function setIsdisplayphonenumberonprofil(bool $isdisplayphonenumberonprofil): self
+    {
+        $this->isdisplayphonenumberonprofil = $isdisplayphonenumberonprofil;
+
+        return $this;
     }
 
 }

@@ -55,6 +55,11 @@
     </tr>
     </tbody>
 </table>
+ {% if moto.showphonenumber %}
+    <p>Vous autorisez l'affichage de votre numero de telephone dans l'annonce: {{ user.phonenumber }}</p>
+     {% else %}
+     <p>Vous n'autorisez pas l'affichage de votre numero de telephone dans l'annonce</p>
+{% endif %}
 <div class="container">
 {% for image in imagesstr %}
     <img src="{{ image }}"

@@ -43,6 +43,7 @@ class MotoType extends AbstractType
                 'required' => false])
             ->add('prix')
         ->add('description',TextareaType::class)
+            ->add('showphonenumber',null,['label'=>"Afficher telephone dans l'annonce"])
         ;
     }
 

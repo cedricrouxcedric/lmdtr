@@ -36,6 +36,7 @@ class PiecedetacheeType extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
+            ->add('showphonenumber',null,['label'=>"Afficher telephone dans l'annonce"])
         ;
     }
 

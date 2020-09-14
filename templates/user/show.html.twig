@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between">
         <div class="d-flex">
             <h1>Profil de {{ user.username }}</h1>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_ADMIN') or app.user ==  user  %}
                 <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
             {% endif %}</div>
         <h3 class="m-3">
@@ -23,6 +23,10 @@
         <tr>
             <th>Email</th>
             <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Numero de telephone</th>
+            <td>{{ user.isdisplayphonenumberonprofil ? user.phonenumber : "....." }}</td>
         </tr>
         <tr>
             <th>Roles</th>

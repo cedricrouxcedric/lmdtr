@@ -53,39 +53,41 @@
         <div class="container">
             <table class="table table-striped">
                 <tr>
-                    <td>Categorie</td>
+                    <th>Categorie</th>
                     <td>{{ moto.categorie.name }}</td>
                 </tr>
                 <tr>
-                    <td>Cylindrée</td>
+                    <th>Cylindrée</th>
                     <td>{{ moto.cylindree }} cc</td>
                 </tr>
                 <tr>
-                    <td>Année</td>
+                    <th>Année</th>
                     <td>{{ moto.year }}</td>
                 </tr>
                 <tr>
-                    <td>Kilométrage :</td>
+                    <th>Kilométrage :</th>
                     <td>{{ moto.kilometrage }}</td>
                 </tr>
                 <tr>
-                    <td>Puissance din/fical</td>
+                    <th>Puissance din/fical</th>
                     <td>{{ moto.din }} / {{ moto.fisc }}</td>
                 </tr>
                 <tr>
-                    <td>Moto bridable</td>
+                    <th>Moto bridable</th>
                     <td>{{ moto.a2 ? "Oui" : "Non" }}</td>
                 </tr>
                 <tr>
-                    <td>Description par le vendeur</td>
+                    <th>Description par le vendeur</th>
                     <td>{{ moto.description }}</td>
                 </tr>
                 <tr>
-                    <td>Vendeur</td>
+                    <th>Vendeur</th>
                     <td>{{ moto.vendeur.username }}</td>
                 </tr>
+                    <th>Numero de telephone du vendeur</th>
+                    <td>{{ moto.showphonenumber ? moto.vendeur.phonenumber : "......"}}</td>
                 <tr>
-                    <td>likes</td>
+                    <th>likes</th>
                     <td class="likeCount">{{ moto.likes|length }}</td>
                 </tr>
             </table>

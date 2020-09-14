@@ -132,6 +132,11 @@ class Moto
      */
     private $validate;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $showphonenumber;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -437,6 +442,18 @@ class Moto
     public function setValidate(bool $validate): self
     {
         $this->validate = $validate;
+
+        return $this;
+    }
+
+    public function getShowphonenumber(): ?bool
+    {
+        return $this->showphonenumber;
+    }
+
+    public function setShowphonenumber(bool $showphonenumber): self
+    {
+        $this->showphonenumber = $showphonenumber;
 
         return $this;
     }

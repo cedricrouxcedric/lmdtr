@@ -11,7 +11,7 @@
     <body class="container">
         {% include 'navbar.html.twig' %}
         <div class="here">
-            {% if not is_granted("ROLE_SUBSCRIBER") and is_granted('ROLE_USER') %}
+            {% if app.user  and not app.user.validateAccount%}
                 <h3 class="text-center text-danger">Pour profiter pleinement de votre site veuillez valider votre compte !</h3>
             {% endif %}</div>
 
