@@ -21,12 +21,7 @@ class DepartementFixtures extends Fixture implements FixtureGroupInterface
         $file = fopen("var/data/departments.csv","r");
         $regionRepo =$manager->getRepository(Regions::class);
         while(($column = fgetcsv($file,10000,",")) !== false) {
-//            $region = New Regions();
-//            $region->setId($column[0]);
-//            $region->setCode($column[1]);
-//            $region->setName($column[2]);
-//            $region->setSlug($column[3]);
-//            $manager->persist($region);
+
             if (($column[0]) !== 'id') {
                 $departement = new Departments();
                 $departement->setRegionCode($regionRepo->findOneBy(['code' => $column[1]]));

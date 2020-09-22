@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepartmentsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,16 @@ class Departments
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Towns::class, mappedBy="department_code", orphanRemoval=true)
+     */
+    private $towns;
+
+    public function __construct()
+    {
+        $this->towns = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +99,37 @@ class Departments
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Towns[]
+     */
+    public function getTowns(): Collection
+    {
+        return $this->towns;
+    }
+
+    public function addTown(Towns $town): self
+    {
+        if (!$this->towns->contains($town)) {
+            $this->towns[] = $town;
+            $town->setDepartmentCode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTown(Towns $town): self
+    {
+        if ($this->towns->contains($town)) {
+            $this->towns->removeElement($town);
+            // set the owning side to null (unless already changed)
+            if ($town->getDepartmentCode() === $this) {
+                $town->setDepartmentCode(null);
+            }
+        }
 
         return $this;
     }
