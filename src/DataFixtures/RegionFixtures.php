@@ -13,7 +13,6 @@ class RegionFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager)
     {
-        //$filename = $_FILES[regions]["tmp_name"];
         $file = fopen("var/data/regions.csv","r");
 
         while(($column = fgetcsv($file,10000,",")) !== false) {
