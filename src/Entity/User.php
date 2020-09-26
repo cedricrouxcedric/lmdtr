@@ -113,6 +113,11 @@ class User implements UserInterface
      */
     private $isdisplayphonenumberonprofil;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Towns::class, inversedBy="users")
+     */
+    private $town;
+
     public function __construct()
     {
         $this->motos = new ArrayCollection();
@@ -496,6 +501,18 @@ class User implements UserInterface
     public function setIsdisplayphonenumberonprofil(bool $isdisplayphonenumberonprofil): self
     {
         $this->isdisplayphonenumberonprofil = $isdisplayphonenumberonprofil;
+
+        return $this;
+    }
+
+    public function getTown(): ?Towns
+    {
+        return $this->town;
+    }
+
+    public function setTown(?Towns $town): self
+    {
+        $this->town = $town;
 
         return $this;
     }
