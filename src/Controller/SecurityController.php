@@ -3,17 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Towns;
 use App\Form\ChangePassType;
 use App\Form\RegistrationType;
 use App\Form\ResetPassType;
 use App\Form\ValidationCodeType;
 use App\Repository\MotoRepository;
+use App\Repository\TownsRepository;
 use App\Repository\PiecedetacheeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use LogicException;
+use MongoDB\Driver\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Email;
@@ -74,13 +78,15 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_registration")
      * @param Request $request
-     * @param EntityManagerInterface $manager
      * @param UserPasswordEncoderInterface $encoder
+     * @param MailerInterface $mailer
+     * @param EntityManagerInterface $manager
      * @return Response
      */
     public function registration(Request $request,
                                  UserPasswordEncoderInterface $encoder,
-                                 MailerInterface $mailer): Response
+                                 MailerInterface $mailer,
+                                 EntityManagerInterface $manager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -89,12 +95,15 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $checkUniqueUsername = $this->UserRepository->findOneBy(['username' => $user->getUsername()]);
             $checkUniqueEmail = $this->UserRepository->findOneBy(['email' => $user->getEmail()]);
+            $townsRepo = $manager->getRepository(Towns::class);
+            $town = $townsRepo->find(35854);
             if ($checkUniqueUsername === null && $checkUniqueEmail === null) {
                 $password = $user->getPassword();
                 $hash = $encoder->encodePassword($user, $password);
                 $user->setPassword($hash);
                 $user->setRoles(["ROLE_USER"]);
                 $user->setConfirmationCode(md5(uniqid()));
+                $user->setTown($town);
                 $email = $user->getEmail();
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($user);
@@ -195,8 +204,13 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('piecedetachee_index');
     }
 
-     /**
+    /**
      * @Route ("/oubli-mdp", name="app_forgot_password")
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param TokenGeneratorInterface $tokenGenerator
+     * @param MailerInterface $mailer
+     * @return RedirectResponse|Response
      */
     public function forgottenPassword(Request $request,
                                       UserRepository $userRepository,
@@ -280,16 +294,5 @@ class SecurityController extends AbstractController
             ]);
 
         $mailer->send($email);
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 }

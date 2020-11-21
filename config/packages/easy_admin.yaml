@@ -24,6 +24,12 @@ easy_admin:
                   - { entity: 'commentaires', label: 'Commentaires', icon: 'tag' }
                   - { entity: 'mots_clé', label: 'Mots_clés', icon: 'tag' }
                   - { entity: 'themes', label: 'Thèmes', icon: 'tag' }
+            - label : 'Geographie'
+              icon: 'newspaper-o'
+              children:
+                  - {entity: 'regions', label: 'Regions', icon: 'tag' }
+                  - {entity: 'departments', label: 'Departements', icon: 'tag' }
+                  - {entity: 'towns', label: 'Villes', icon: 'tag' }
 
 
     formats:
@@ -138,3 +144,21 @@ easy_admin:
                 actions:
                     - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
                     - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
+        regions:
+            class: App\Entity\Regions
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+        departments:
+            class: App\Entity\Departments
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+        towns:
+            class: App\Entity\Towns
+            list:
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }

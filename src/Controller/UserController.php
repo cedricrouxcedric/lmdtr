@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\LocationType;
 use App\Repository\ArticlesRepository;
 use App\Repository\CommentairesRepository;
 use App\Repository\PiecedetacheeRepository;
@@ -34,32 +35,40 @@ class UserController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/new", name="user_new", methods={"GET","POST"})
-//     */
-//    public function new(Request $request): Response
-//    {
-//        $user = new User();
-//        $form = $this->createForm(UserType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('user_index');
-//        }
-//
-//        return $this->render('user/new.html.twig', [
-//            'user' => $user,
-//            'form' => $form->createView(),
-//        ]);
-//    }
+    /**
+     * @Route("/new", name="user_new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function new(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/new.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/{id}", name="user_show", methods={"GET"})
+     * @param User $user
+     * @param MotoRepository $motoRepository
+     * @param ArticlesRepository $articlesRepository
+     * @param CommentairesRepository $commentairesRepository
+     * @param PiecedetacheeRepository $piecedetacheeRepository
+     * @return Response
      */
     public function show(User $user,
                          MotoRepository $motoRepository,
@@ -78,65 +87,80 @@ class UserController extends AbstractController
             'forSale' => $motoOnSale,
             'articles' => $articleCreated,
             'commentaires' => $commentaires,
-            'pieces'=> $pieces,
+            'pieces' => $pieces,
         ]);
     }
 
     /**
      * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param User $user
+     * @return Response
      */
     public function edit(Request $request,
                          User $user): Response
     {
-        if ($user === $this->getUser() or $this->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(UserType::class, $user);
-            if ($user === $this->getUser()) {
-                $form->add('phonenumber', TelType::class,['label' => 'Numéro de telephone'])
-                     ->add('isdisplayphonenumberonprofil',null,['label'=>"Affichage de mon telephone sur mon profil"]);
-            }
-            if ($this->isGranted('ROLE_ADMIN')){
-                $form ->add('roles', ChoiceType::class, [
-                    'label'      => 'Role ',
-                    'expanded' => true,
-                    'multiple'=> true,
-                    'choices' => array(
-                        'Sac de sable' => 'ROLE_USER',
-                        'Motard' => 'ROLE_SUBSCRIBER',
-                        'Pilote' => 'ROLE_ADMIN',
-                    )
-                ]);
-            }
 
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        $form = $this->createForm(UserType::class, $user);
 
-                return $this->redirectToRoute('user_index');
-            }
-
-            return $this->render('user/edit.html.twig', [
-                'user' => $user,
-                'form' => $form->createView(),
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $form->add('roles', ChoiceType::class, [
+                'label' => 'Role ',
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => array(
+                    'Sac de sable' => 'ROLE_USER',
+                    'Motard' => 'ROLE_SUBSCRIBER',
+                    'Pilote' => 'ROLE_ADMIN',
+                )
             ]);
         }
-        $this->addFlash('error','Vous ne pouvez pas faire ça ');
+        if ($this->isGranted('ROLE_SUPERADMIN')) {
+            $form->add('roles', ChoiceType::class, [
+                'label' => 'Role ',
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => array(
+                    'Sac de sable' => 'ROLE_USER',
+                    'Motard' => 'ROLE_SUBSCRIBER',
+                    'Pilote' => 'ROLE_ADMIN',
+                    'Force de l\'ordre' => 'ROLE_SUPERADMIN',
+                )
+            ]);
+        }
+
+        $form->handleRequest($request);
+        $formLocation = $this->createForm(LocationType::class, $user);
+        $formLocation->handleRequest($request);
+        if (($form->isSubmitted() && $form->isValid()) || ($formLocation->isSubmitted() && $formLocation->isValid())) {
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('user_index');
+        }
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            'locationform' => $formLocation->createView(),
+        ]);
+        $this->addFlash('error', 'Vous ne pouvez pas faire ça ');
         return $this->redirectToRoute('user_index');
     }
 
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}/delete", name="user_delete",methods={"DELETE"})
+     * @param Request $request
+     * @param User $user
+     * @return Response
      */
     public function delete(Request $request,
                            User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('user_index');
     }
 }

@@ -3,9 +3,10 @@
 {% block title %}Editer Utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Editer Utilisateur</h1>
+    <h1>Editer {{ user.username }}</h1>
 
     {{ include('user/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
+    {{ include('user/locationForm.html.twig',{'button_label': 'enregistrer votre ville'}) }}
 
     <a  class="btn btn-primary my-3" href="{{ path('user_index') }}">Retourner à la liste</a>
 

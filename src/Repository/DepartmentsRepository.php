@@ -9,7 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Departments|null find($id, $lockMode = null, $lockVersion = null)
  * @method Departments|null findOneBy(array $criteria, array $orderBy = null)
- * @method Departments[]    findAll()
  * @method Departments[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DepartmentsRepository extends ServiceEntityRepository
@@ -19,6 +18,10 @@ class DepartmentsRepository extends ServiceEntityRepository
         parent::__construct($registry, Departments::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('name' => 'ASC'));
+    }
     // /**
     //  * @return Departments[] Returns an array of Departments objects
     //  */

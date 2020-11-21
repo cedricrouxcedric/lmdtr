@@ -3,88 +3,71 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-between">
-        <div class="d-flex">
-            <h1>Profil de {{ user.username }}</h1>
-            {% if is_granted('ROLE_ADMIN') or app.user ==  user  %}
-                <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-            {% endif %}</div>
-        <h3 class="m-3">
-            <a class="text-dark" href="{{ path('user_index') }}">Liste des utilisateurs</a>
-        </h3>
-    </div>
+<div class="d-flex justify-content-between">
+    <div class="d-flex">
+        <h1>Profil de {{ user.username }}</h1>
+        {% if is_granted('ROLE_ADMIN') or app.user ==  user %}
+            <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+        {% endif %}</div>
+    <h3 class="m-3">
+        <a class="text-dark" href="{{ path('user_index') }}">Liste des utilisateurs</a>
+    </h3>
+</div>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Pseudonyme</th>
-            <td>{{ user.username }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <th>Numero de telephone</th>
-            <td>{{ user.isdisplayphonenumberonprofil ? user.phonenumber : "....." }}</td>
-        </tr>
-        <tr>
-            <th>Roles</th>
-            <td>{{ user.roles ? user.roleString }}</td>
-        </tr>
-        <tr>
-            <th>Compte validé</th>
-            <td>{{ user.validateAccount ? 'Oui' : 'Non' }}</td>
-        </tr>
-        <tr>
-            <th>cgu acceptées</th>
-            <td>{{ user.cgu ? 'Oui' : 'Non' }}</td>
-        </tr>
-        </tbody>
-    </table>
-    <div>
-        {% if app.user == user %}
-            <p id="motosfavorites" class="btn btn-primary">Motos favorites</p>
-        {% endif %}
-        <p id="motosenventes" class="btn btn-dark">Motos en ventes</p>
-        <p id="piecesenventes" class="btn btn-dark">Piéces détachées vendues par {{ user }}</p>
-        <p id="sujetouverts" class="btn btn-dark">Sujets ouverts par {{ user }}</p>
-        <p id="commentaireposte" class="btn btn-dark">Commentaires de {{ user }}</p>
-    </div>
-    {% if app.user == user %}
-        <div id="favoritesliste">
-            <h2>Mes motos favorites</h2>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th class="text-center" scope="col">#</th>
-                    <th class="text-center" scope="col">Marque</th>
-                    <th class="text-center" scope="col">Model</th>
-                    <th class="text-center" scope="col">Année</th>
-                    <th class="text-center" scope="col">Prix</th>
-                    <th class="text-center" scope="col">Vendeur</th>
-                    <th class="text-center" scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for moto in favorites %}
-                    <tr>
-                        <th class="text-center" scope="row">{{ loop.index }}</th>
-                        <td class="text-center">{{ moto.marque }}</td>
-                        <td class="text-center">{{ moto.model }}</td>
-                        <td class="text-center">{{ moto.year }}</td>
-                        <td class="text-center">{{ moto.formattedprice }}</td>
-                        <td class="text-center">{{ moto.vendeur }}</td>
-                        <td class="text-center"><a class="btn btn-dark"
-                                                   href="{{ path('moto_show',{id: moto.id}) }}">Voir</a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Pseudonyme</th>
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+        <th>Numéro de telephone</th>
+        <td>{{ user.isdisplayphonenumberonprofil ? user.phonenumber : "....." }}</td>
+    </tr>
+    <tr>
+        <th>Rôles</th>
+        <td>{{ user.roles ? user.roleString }}</td>
+    </tr>
+    {% if user.town %}
+    <tr>
+        <th>Région</th>
+        <td>{{ user.town ? user.town.departmentCode.regionCode.name }}</td>
+    </tr>
+    <tr>
+        <th>Département</th>
+        <td>{{ user.town ? user.town.departmentCode.name }}</td>
+    </tr>
+    <tr>
+        <th>Ville</th>
+        <td>{{ user.town ? user.town.name }} _ {{ user.town ? user.town.zipcode }} </td>
+    </tr>
     {% endif %}
-    <div id="annoncesmoto">
-        <h2>Annonces de moto de {{ user.username }}</h2>
+    <tr>
+        <th>Compte validé</th>
+        <td>{{ user.validateAccount ? 'Oui' : 'Non' }}</td>
+    </tr>
+    <tr>
+        <th>cgu acceptées</th>
+        <td>{{ user.cgu ? 'Oui' : 'Non' }}</td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    {% if app.user == user %}
+        <p id="motosfavorites" class="btn btn-primary">Motos favorites</p>
+    {% endif %}
+    <p id="motosenventes" class="btn btn-dark">Motos en ventes</p>
+    <p id="piecesenventes" class="btn btn-dark">Piéces détachées vendues par {{ user }}</p>
+    <p id="sujetouverts" class="btn btn-dark">Sujets ouverts par {{ user }}</p>
+    <p id="commentaireposte" class="btn btn-dark">Commentaires de {{ user }}</p>
+</div>
+{% if app.user == user %}
+    <div id="favoritesliste">
+        <h2>Mes motos favorites</h2>
         <table class="table">
             <thead>
             <tr>
@@ -93,120 +76,151 @@
                 <th class="text-center" scope="col">Model</th>
                 <th class="text-center" scope="col">Année</th>
                 <th class="text-center" scope="col">Prix</th>
+                <th class="text-center" scope="col">Vendeur</th>
                 <th class="text-center" scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
-            {% for sale in forSale %}
+            {% for moto in favorites %}
                 <tr>
                     <th class="text-center" scope="row">{{ loop.index }}</th>
-                    <td class="text-center">{{ sale.marque }}</td>
-                    <td class="text-center">{{ sale.model }}</td>
-                    <td class="text-center">{{ sale.year }}</td>
-                    <td class="text-center">{{ sale.formattedprice }}</td>
+                    <td class="text-center">{{ moto.marque }}</td>
+                    <td class="text-center">{{ moto.model }}</td>
+                    <td class="text-center">{{ moto.year }}</td>
+                    <td class="text-center">{{ moto.formattedprice }}</td>
+                    <td class="text-center">{{ moto.vendeur }}</td>
                     <td class="text-center"><a class="btn btn-dark"
-                                               href="{{ path('moto_show',{id: sale.id}) }}">Voir</a></td>
+                                               href="{{ path('moto_show',{id: moto.id}) }}">Voir</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-    <div id="annoncespieces">
-        <h2>Annonces de piéces détachées de {{ user.username }}</h2>
-        <table class="table">
-            <thead>
+{% endif %}
+<div id="annoncesmoto">
+    <h2>Annonces de moto de {{ user.username }}</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">Marque</th>
+            <th class="text-center" scope="col">Model</th>
+            <th class="text-center" scope="col">Année</th>
+            <th class="text-center" scope="col">Prix</th>
+            <th class="text-center" scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sale in forSale %}
             <tr>
-                <th class="text-center" scope="col">#</th>
-                <th class="text-center" scope="col">Piéce</th>
-                <th class="text-center" scope="col">Marque</th>
-                <th class="text-center" scope="col">Model</th>
-                <th class="text-center" scope="col">Prix</th>
-                <th class="text-center" scope="col">Action</th>
+                <th class="text-center" scope="row">{{ loop.index }}</th>
+                <td class="text-center">{{ sale.marque }}</td>
+                <td class="text-center">{{ sale.model }}</td>
+                <td class="text-center">{{ sale.year }}</td>
+                <td class="text-center">{{ sale.formattedprice }}</td>
+                <td class="text-center"><a class="btn btn-dark"
+                                           href="{{ path('moto_show',{id: sale.id}) }}">Voir</a></td>
             </tr>
-            </thead>
-            <tbody>
-            {% for piece in pieces %}
-                <tr>
-                    <th class="text-center" scope="row">{{ loop.index }}</th>
-                    <td class="text-center">{{ piece.name }}</td>
-                    <td class="text-center">{{ piece.marque }}</td>
-                    <td class="text-center">{{ piece.model }}</td>
-                    <td class="text-center">{{ piece.formattedprice }}</td>
-                    <td class="text-center">
-                        <a class="btn btn-dark"
-                           href="{{ path('piecedetachee_show',{id: piece.id}) }}">
-                            Voir l'annonce
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div id="sujet">
-        <h2>Sujet ouverts par {{ user.username }}</h2>
-        <table class="table">
-            <thead>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="annoncespieces">
+    <h2>Annonces de piéces détachées de {{ user.username }}</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">Piéce</th>
+            <th class="text-center" scope="col">Marque</th>
+            <th class="text-center" scope="col">Model</th>
+            <th class="text-center" scope="col">Prix</th>
+            <th class="text-center" scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for piece in pieces %}
             <tr>
-                <th class="text-center" scope="col">#</th>
-                <th class="text-center" scope="col">sujet</th>
-                <th class="text-center" scope="col">thème</th>
-                <th class="text-center" scope="col">Date de creation</th>
-                <th class="text-center" scope="col">Nbr de commentaires</th>
-                <th class="text-center" scope="col">Action</th>
+                <th class="text-center" scope="row">{{ loop.index }}</th>
+                <td class="text-center">{{ piece.name }}</td>
+                <td class="text-center">{{ piece.marque }}</td>
+                <td class="text-center">{{ piece.model }}</td>
+                <td class="text-center">{{ piece.formattedprice }}</td>
+                <td class="text-center">
+                    <a class="btn btn-dark"
+                       href="{{ path('piecedetachee_show',{id: piece.id}) }}">
+                        Voir l'annonce
+                    </a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            {% for article in articles %}
-                <tr>
-                    <th class="text-center" scope="row">{{ loop.index }}</th>
-                    <td class="text-center">{{ article.titre }}</td>
-                    <td class="text-center">{{ article.themes }}</td>
-                    <td class="text-center">{{ article.createdAt|date('Y-m-d H:i:s') }}</td>
-                    <td class="text-center">{{ article.commentaires|length }}</td>
-                    <td class="text-center"><a class="btn btn-dark"
-                                               href="{{ path('articles_show',{id:article.id}) }}">voir</a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div id="commentairesBlock">
-        <h2>Commentaires postés par {{ user.username }}</h2>
-        <table class="table">
-            <thead>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="sujet">
+    <h2>Sujet ouverts par {{ user.username }}</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">sujet</th>
+            <th class="text-center" scope="col">thème</th>
+            <th class="text-center" scope="col">Date de creation</th>
+            <th class="text-center" scope="col">Nbr de commentaires</th>
+            <th class="text-center" scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
             <tr>
-                <th class="text-center" scope="col">#</th>
-                <th class="text-center" scope="col">Theme</th>
-                <th class="text-center" scope="col">Article</th>
-                <th class="text-center" scope="col">Contenu</th>
-                <th class="text-center" scope="col">Date de publication</th>
-                <th class="text-center" scope="col">Action</th>
+                <th class="text-center" scope="row">{{ loop.index }}</th>
+                <td class="text-center">{{ article.titre }}</td>
+                <td class="text-center">{{ article.themes }}</td>
+                <td class="text-center">{{ article.createdAt|date('Y-m-d H:i:s') }}</td>
+                <td class="text-center">{{ article.commentaires|length }}</td>
+                <td class="text-center"><a class="btn btn-dark"
+                                           href="{{ path('articles_show',{id:article.id}) }}">voir</a></td>
             </tr>
-            </thead>
-            <tbody>
-            {% for commentaire in commentaires %}
-                <tr>
-                    <th class="text-center" scope="row">{{ loop.index }}</th>
-                    <td class="text-center">{{ commentaire.articles.themes.name }}</td>
-                    <td class="text-center">{{ commentaire.articles.titre }}</td>
-                    <td class="text-center">{{ commentaire.contenu }}</td>
-                    <td class="text-center">{{ commentaire.createdAt|date('Y-m-d H:i:s') }}</td>
-                    <td class="text-center">
-                        <a class="btn btn-dark"
-                           href="{{ path('articles_show',{id: commentaire.articles.id}) }}">
-                            voir
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="commentairesBlock">
+    <h2>Commentaires postés par {{ user.username }}</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">Theme</th>
+            <th class="text-center" scope="col">Article</th>
+            <th class="text-center" scope="col">Contenu</th>
+            <th class="text-center" scope="col">Date de publication</th>
+            <th class="text-center" scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for commentaire in commentaires %}
+            <tr>
+                <th class="text-center" scope="row">{{ loop.index }}</th>
+                <td class="text-center">{{ commentaire.articles.themes.name }}</td>
+                <td class="text-center">{{ commentaire.articles.titre }}</td>
+                <td class="text-center">{{ commentaire.contenu }}</td>
+                <td class="text-center">{{ commentaire.createdAt|date('Y-m-d H:i:s') }}</td>
+                <td class="text-center">
+                    <a class="btn btn-dark"
+                       href="{{ path('articles_show',{id: commentaire.articles.id}) }}">
+                        voir
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    </div>
-    {% if is_granted('ROLE_SUPERADMIN') or (app.user == user) %}
-        <div>{{ include('user/_delete_form.html.twig') }}</div>
-    {% endif %}
+</div>
+{% if is_granted('ROLE_SUPERADMIN') or (app.user == user) %}
+    <div>{{ include('user/_delete_form.html.twig') }}</div>
+{% endif %}
 {% endblock %}
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}

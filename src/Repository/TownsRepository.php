@@ -19,32 +19,14 @@ class TownsRepository extends ServiceEntityRepository
         parent::__construct($registry, Towns::class);
     }
 
-    // /**
-    //  * @return Towns[] Returns an array of Towns objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getTownsForm($value)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+            ->andWhere('t.department_code = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Towns
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

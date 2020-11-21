@@ -2,3 +2,12 @@
     {{ form_widget(form) }}
     <button class="btn btn-danger">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
+{% block javascript %}
+{{ encore_entry_script_tags('app') }}
+<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{{ asset('js/location.js') }}"></script>
+{% endblock %}
