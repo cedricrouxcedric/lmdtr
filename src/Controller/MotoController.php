@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Images;
 use App\Entity\Moto;
+use App\Entity\User;
 use App\Form\MotoType;
 use App\Repository\MotoLikeRepository;
 use App\Repository\MotoRepository;
@@ -142,7 +143,7 @@ class MotoController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($moto);
                 $entityManager->flush();
-                $contactController->sendNewMotoConfirmation($user,$moto);
+                $contactController->sendNewMotoConfirmation($user, $moto);
                 return $this->redirectToRoute('moto_index');
             }
             $this->addFlash('error', "Les photos ne respectent pas le format requis");
@@ -156,11 +157,23 @@ class MotoController extends AbstractController
 
     /**
      * @Route("/moto/{id}", name="moto_show", methods={"GET"})
+     * @param Moto $moto
+     * @param UserInterface $user
+     * @return Response
      */
     public function show(Moto $moto): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $distance = $this->calculDistance(
+            $user->getTown()->getLat(),
+            $user->getTown()->getLng(),
+            $moto->getVendeur()->getTown()->getLat(),
+            $moto->getVendeur()->getTown()->getLng()
+        );
         return $this->render('moto/show.html.twig', [
             'moto' => $moto,
+            'distance' => $distance,
         ]);
 
     }
@@ -206,8 +219,8 @@ class MotoController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $likes = $moto->getLikes();
             $motoLikeRepo = $entityManager->getRepository(MotoLike::class);
-            foreach ($likes as $like){
-                $motoLike = $motoLikeRepo->findOneBy(['moto'=> $like->getMoto()]);
+            foreach ($likes as $like) {
+                $motoLike = $motoLikeRepo->findOneBy(['moto' => $like->getMoto()]);
                 $moto->removeLike($like);
                 $entityManager->remove($motoLike);
             }
@@ -271,7 +284,6 @@ class MotoController extends AbstractController
 
                 $manager->remove($like);
                 $message = "Moto retirée de vos favoris";
-
             }
             $manager->flush();
             return $this->json([
@@ -280,14 +292,28 @@ class MotoController extends AbstractController
                 'message' => $message,
                 'likes' => $likeRepo->count(['moto' => $moto])
             ], 200);
-
         } else {
             return $this->json([
-                'code'=> 403,
-                'message'=> "Unauthorized"
-            ],403);
+                'code' => 403,
+                'message' => "Unauthorized"
+            ], 403);
         }
     }
 
-
+    private function calculDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $pi80 = M_PI / 180;
+        $lat1 *= $pi80;
+        $lng1 *= $pi80;
+        $lat2 *= $pi80;
+        $lng2 *= $pi80;
+        $r = 6372.797; // rayon moyen de la Terre en km
+        $dlat = $lat2 - $lat1;
+        $dlng = $lng2 - $lng1;
+        $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin(
+                $dlng / 2) * sin($dlng / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $km = $r * $c;
+        return (round($km));
+    }
 }

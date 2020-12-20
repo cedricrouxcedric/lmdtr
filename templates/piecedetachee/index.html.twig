@@ -21,7 +21,7 @@
                         </h5>
                         <p class="card-text text-center">{{ piece.FormattedPrice }}</p>
                         <p>Vendeur : {{ piece.vendeur.username }} </p>
-                        <p>Publiée le : {{ piece.createdAt|date("d/m/Y") }} à {{  piece.createdAt|date("H:i") }}</p>
+                        <p>Publiée le : {{ piece.createdAt|date("d/m/Y") }} à {{ piece.createdAt|date("H:i") }}</p>
 
                         <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
                             <a class="{{ vendeur ? " " : "card-text text-center " }}col-6 "

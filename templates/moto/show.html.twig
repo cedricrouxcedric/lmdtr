@@ -84,8 +84,14 @@
                     <th>Vendeur</th>
                     <td>{{ moto.vendeur.username }}</td>
                 </tr>
+                <tr>
+                    <th>Distance</th>
+                    <td>{{ distance }} Km</td>
+                </tr>
+                <tr>
                     <th>Numero de telephone du vendeur</th>
                     <td>{{ moto.showphonenumber ? moto.vendeur.phonenumber : "......"}}</td>
+                </tr>
                 <tr>
                     <th>likes</th>
                     <td class="likeCount">{{ moto.likes|length }}</td>

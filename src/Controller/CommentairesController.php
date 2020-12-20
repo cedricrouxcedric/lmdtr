@@ -29,7 +29,7 @@ class CommentairesController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_SUBSCIBER")
+     * @IsGranted("ROLE_SUBSCRIBER")
      * @Route("/article/{article}", name="commentaires_new", methods={"GET","POST"})
      */
     public function new(Request $request, ArticlesRepository $articlesRepository, UserInterface $user): Response
