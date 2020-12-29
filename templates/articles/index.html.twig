@@ -3,42 +3,45 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-    <h1>Articles</h1>
+    <div class="container-fluid">
+        <h1 class="row justify-content-center">Articles</h1>
+        <div class="row justify-content-center">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Theme</th>
+                    <th>Titre</th>
+                    <th>Contenu</th>
+                    <th>Date de creation</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Updated_at</th>
+                        <th>actions</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.themes.name }}</td>
+                        <td>{{ article.titre }}</td>
+                        <td>{{ article.contenu }}</td>
+                        <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td>{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>
+                                <a href="{{ path('articles_show', {'id': article.id}) }}">Voir l'article</a>
+                                <a href="{{ path('articles_edit', {'id': article.id}) }}">Editer l'article</a>
+                            </td>
+                        {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Theme</th>
-                <th>Titre</th>
-                <th>Contenu</th>
-                <th>Date de creation</th>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <th>Updated_at</th>
-                    <th>actions</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.themes.name }}</td>
-                <td>{{ article.titre }}</td>
-                <td>{{ article.contenu }}</td>
-                <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <td>{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        <a href="{{ path('articles_show', {'id': article.id}) }}">Voir l'article</a>
-                        <a href="{{ path('articles_edit', {'id': article.id}) }}">Editer l'article</a>
-                    </td>
-                {% endif %}
-
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

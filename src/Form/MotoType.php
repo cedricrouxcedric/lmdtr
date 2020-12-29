@@ -22,21 +22,22 @@ class MotoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('marque',null,['choice_label' => 'name'])
-            ->add('model',TextType::class)
-            ->add('cylindree',IntegerType::class,['label' => 'cylindrée en cm³','attr'=>array('min'=> 50,'max'=>6200,'class'=>'cylindreInput')])
+            ->add('marque',null,['choice_label' => 'name','attr'=>array('class'=>'col-9 m-3')])
+            ->add('model',TextType::class,['attr'=>array('class'=>'col-9 m-3')])
+            ->add('cylindree',IntegerType::class,['label' => 'cylindrée en cm³','attr'=>array('min'=> 50,'max'=>6200,'class'=>'cylindreInput col-9 m-3')])
 
-            ->add('year',IntegerType::class,['label' => 'Année','attr'=>array('min'=>1868,'max'=>date("Y")+1)])
-            ->add('kilometrage',IntegerType::class)
-            ->add('din',IntegerType::class,['label' => 'puissance'])
-            ->add('fisc',IntegerType::class,['label' => 'puissance fiscal' ])
-            ->add('categorie',null,['choice_label' => 'name'])
+            ->add('year',IntegerType::class,['label' => 'Année','attr'=>array('class'=>'col-9 m-3','min'=>1868,'max'=>date("Y")+1),])
+            ->add('kilometrage',IntegerType::class,['attr'=>array('class'=>'col-9 m-3')])
+            ->add('din',IntegerType::class,['label' => 'puissance','attr'=>array('class'=>'col-9 m-3')])
+            ->add('fisc',IntegerType::class,['label' => 'puissance fiscal','attr'=>array('class'=>'col-9 m-3')])
+            ->add('categorie',null,['choice_label' => 'name','attr'=>array('class'=>'col-6 m-3')])
             // Ajout du champ "IMAGES" au formulaire n'etant pas lié a la bdd (mapped false)
             ->add('images', FileType::class, [
                 'label' => "Photos",
                 'multiple' => true,
                 'mapped' => false,
-                'required' => false
+                'required' => false,
+                'attr'=>array('class'=>'col-6 m-3')
             ])
             ->add('a2',CheckboxType::class,[
                 'label' => 'Bridable',

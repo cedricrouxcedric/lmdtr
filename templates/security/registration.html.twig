@@ -3,8 +3,9 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Inscription sur Les motards de ta region</h1>
 
+<div class="container">
+    <h1>Inscription sur Les motards de ta region</h1>
     <div class="form-group">
         {{ form_start(form) }}
     </div>
@@ -29,6 +30,7 @@
     <div class="form-group">
         <button class="btn btn-success ml-3" type="submit">Inscription</button>
     </div>
+</div>
     {{ form_end(form) }}
 
 {% endblock %}

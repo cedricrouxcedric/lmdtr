@@ -1,10 +1,21 @@
 @import "~bootstrap/scss/bootstrap";
 
-body {
-  max-width: 1200px !important;
-  background-color: #AAAAAA;
+@media screen and (min-width: 400px) and (max-width: 770px) {
+  .img-moto {
+    display: none;
+  }
+  .accueil{
+    display: none;
+  }
 }
 
+body {
+  background-color: #AAAAAA;
+  font-size: 1.5rem;
+}
+img {
+  height: auto;
+}
 .site-heading .site-heading-upper {
   display: block;
   font-size: 2rem;
@@ -52,9 +63,16 @@ body {
   background-color: #AAAABB;
 }
 
+.card-title {
+  font-size: 2.5em;
+}
+
+.card-text {
+  font-size: 1.5em;
+}
 
 .img-moto {
-  max-height: 235px;
+  height: auto;
 }
 
 .column {
@@ -110,6 +128,19 @@ a {
   top: 85%;
 }
 
+.card-deck {
+  margin: 0 -15px;
+  justify-content: space-between;
+}
+
+.card-deck .card {
+  margin: 0 0 1rem;
+}
+
+#dropdownMenuButton{
+  margin-left: -30px !important ;
+}
+
 .grey {
   color: gray;
 }
@@ -138,4 +169,12 @@ a {
 
 .textneedco {
   font-size: 1.5em;
+}
+
+table {
+  max-width: 1200px;
+}
+
+.editLink{
+  font-size: small;
 }

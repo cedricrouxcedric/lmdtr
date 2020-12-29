@@ -3,48 +3,56 @@
 {% block title %}Themes index{% endblock %}
 
 {% block body %}
-    <h1>Themes index</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th class="text-center">Themes</th>
-            <th class="text-center">Nbr de sujets</th>
-            <th class="text-center">Dernier article</th>
-            <th class="text-center">Dernier contributeur</th>
-            <th class="text-center">derniére contribution</th>
-            {% if is_granted('ROLE_ADMIN') %}
-                <th class="text-center">actions</th>
-            {% endif %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for theme in themes %}
-            {% set nbrarticles = theme.articles|length %}
-            <tr>
-                <td class="text-center"><a class="font-weight-bold text-dark" href="{{ path('themes_show', {'name': theme.name}) }}">{{ theme.name }}</a></td>
-                <td class="text-center">{{ nbrarticles }}</td>
-                {% if nbrarticles > 0 %}
-                    <td class="text-center">{{ theme.articles|last.titre  }}</td>
-                    <td class="text-center">{{ theme.articles|last.auteur.username  }}</td>
-                    <td class="text-center">{{ theme.articles|last.createdAt.format("d/m/Y H:i") }}</td>
-                    {% else %}
-                        <td class="text-center">--</td>
-                        <td class="text-center">--</td>
-                        <td class="text-center">--</td>
-                {% endif %}
+
+    <div class="container-fluid">
+        <h1 class="row justify-content-center">Themes index</h1>
+        <div class="row justify-content-center">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-center">Themes</th>
+                    <th class="text-center">Nbr de sujets</th>
+                    <th class="text-center">Dernier article</th>
+                    <th class="text-center">Dernier contributeur</th>
+                    <th class="text-center">derniére contribution</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th class="text-center">actions</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for theme in themes %}
+                    {% set nbrarticles = theme.articles|length %}
+                    <tr>
+                        <td class="text-center"><a class="font-weight-bold text-dark"
+                                                   href="{{ path('themes_show', {'name': theme.name}) }}">{{ theme.name }}</a>
+                        </td>
+                        <td class="text-center">{{ nbrarticles }}</td>
+                        {% if nbrarticles > 0 %}
+                            <td class="text-center">{{ theme.articles|last.titre }}</td>
+                            <td class="text-center">{{ theme.articles|last.auteur.username }}</td>
+                            <td class="text-center">{{ theme.articles|last.createdAt.format("d/m/Y H:i") }}</td>
+                        {% else %}
+                            <td class="text-center">--</td>
+                            <td class="text-center">--</td>
+                            <td class="text-center">--</td>
+                        {% endif %}
 
 
-                {% if (is_granted("ROLE_ADMIN")) %}
-                    <td class="text-center">
-                        <a class="text-center" href="{{ path('themes_show', {'name': theme.name}) }}">show</a>
-                        <a class="text-center" href="{{ path('themes_edit', {'id': theme.id}) }}">edit</a>
-                    </td>
-                {% endif %}
-            </tr>
-        {% else %}
-        {% endfor %}
-        </tbody>
-    </table>
+                        {% if (is_granted("ROLE_ADMIN")) %}
+                            <td class="text-center">
+                                <a class="text-center" href="{{ path('themes_show', {'name': theme.name}) }}">show</a>
+                                <a class="text-center" href="{{ path('themes_edit', {'id': theme.id}) }}">edit</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% else %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% if  (is_granted("ROLE_ADMIN")) %}
         <a href="{{ path('themes_new') }}">Créer un thème</a>
     {% endif %}

@@ -5,8 +5,8 @@
     <h1>Moto occasion</h1>
     <div class="row">
         {% for moto in motos %}
-            {% set vendeur = ((app.user == moto.vendeur) or (is_granted("ROLE_ADMIN"))) %}
-            <div class="col-4">
+            {% set vendeurOrAdmin = ((app.user == moto.vendeur) or (is_granted("ROLE_ADMIN"))) %}
+            <div class="col-md-6 col-lg-4 col-xl-3 ">
                 <div class="card mb-4">
                     {% if moto.images is not empty %}
                         <div>
@@ -15,20 +15,35 @@
                                  alt="Image">
                         </div>
                     {% endif %}
+                    {% if moto.images is empty %}
+                        <div>
+                            <img class=""
+                                 src="{{ asset('/uploads/' ~ "defaultPicture.png") }}"
+                                 alt="image" height="100px">
+                        </div>
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title text-center">
                             {{ moto.marque.name }} - {{ moto.model }} - {{ moto.year }}
                         </h5>
                         <p class="card-text text-center">{{ moto.FormattedPrice }}</p>
-                        <p>Vendeur : {{ moto.vendeur.username }} </p>
-                        <p>Publiée le : {{ moto.createdAt|date("d/m/Y") }} à {{  moto.createdAt|date("H:i") }}</p>
-                        <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
-                            <a class="{{ vendeur ? " " : "card-text text-center " }}col-6 "
+                        <p class="card-text">Vendeur : {{ moto.vendeur.username }} </p>
+                        <p class="card-text">Publiée le : {{ moto.createdAt|date("d/m/Y") }}
+                            à {{ moto.createdAt|date("H:i") }}</p>
+                        {% if is_granted("ROLE_SUBSCRIBER") %}
+                        <div class=" {{ vendeurOrAdmin ? " row " : " card-text " }} text-center">
+                            <a class="{{ vendeurOrAdmin ? " " : " text-center " }} card-text "
                                href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a>
-                            {% if vendeur %}
-                                <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier l'annonce</a>
-                            {% endif %}
+                            {% if vendeurOrAdmin %}
+                            <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier
+                                l'annonce</a>
                         </div>
+                        {% endif %}
+                    {% elseif is_granted("ROLE_SUBSCRIBER") == false %}
+                        <div class="card-text text-center">
+                            <a class="" href="{{ path('app_login') }}">Connecter</a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
