@@ -45,7 +45,7 @@
                 {% if is_granted('ROLE_SUBSCRIBER') %}
                     <a href="{{ path('articles_new',{'theme' :theme.id}) }}">Creer un nouvel article</a>
                 {% else %}
-                    <a href="{{ path('app_login') }}">Vous devez vous connecter pour pouvoir créer un sujet de
+                    <a href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir créer un sujet de
                         conversation</a>
                 {% endif %}
             </div>

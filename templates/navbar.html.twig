@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <nav class=" navbar navbar-expand-lg bg-dark navbar-dark">
-        <a class="navbar-brand accueil"
+        <a class="navbar-brand accueil mr-4"
            href="{{ path('lmdtr_index') }}">
             Accueil
         </a>
@@ -19,7 +19,7 @@
                 <li>
                     <div class="container">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle grey px-0" type="button" id="dropdownMenuButton"
+                            <button class="btn dropdown-toggle grey px-0 m-2" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Consulte les annonces
                             </button>
@@ -35,7 +35,7 @@
                     <li>
                         <div class="container">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle grey px-0" type="button" id="dropdownMenuButton"
+                                <button class="btn dropdown-toggle grey px-0 m-2" type="button" id="dropdownMenuButton"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Depose une annonce
                                 </button>
@@ -68,6 +68,7 @@
                            class="nav-link">
                             Gestion
                         </a>
+                    </li>
                         {% endif %}
                         {% if not app.user %}
                     <li class="nav-item mr-2">

@@ -25,6 +25,7 @@ class TownsRepository extends ServiceEntityRepository
             ->andWhere('t.department_code = :val')
             ->setParameter('val', $value)
             ->orderBy('t.name', 'ASC')
+            ->distinct(true)
             ->getQuery()
             ->getResult()
             ;

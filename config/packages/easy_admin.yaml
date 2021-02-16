@@ -1,164 +1,164 @@
 easy_admin:
-    site_name: 'Gestion de mon site'
+  site_name: 'Gestion de mon site'
+  user:
+    display_name: true
+  design:
+    form_theme:
+      - "@EasyAdmin/form/bootstrap_4.html.twig"
+    menu:
+      - { entity: 'user', label: 'Utilisateurs', icon: 'user' }
+      - label: 'Annonces'
+        icon: 'newspaper-o'
+        children:
+          - { entity: 'Piecedetachee', label: 'Pieces détachées', icon: 'tag' }
+          - { entity: 'moto', label: 'Motos', icon: 'tag' }
+      - label: 'Motos & Piéces'
+        icon: 'newspaper-o'
+        children:
+          - { entity: 'categorie', label: 'Categories Moto', icon: 'tag' }
+          - { entity: 'marque', label: 'Marques', icon: 'tag' }
+      - label: 'Forum'
+        icon: 'newspaper-o'
+        children:
+          - { entity: 'articles', label: 'Articles forum', icon: 'tag' }
+          - { entity: 'commentaires', label: 'Commentaires', icon: 'tag' }
+          - { entity: 'mots_clé', label: 'Mots_clés', icon: 'tag' }
+          - { entity: 'themes', label: 'Thèmes', icon: 'tag' }
+      - label: 'Geographie'
+        icon: 'newspaper-o'
+        children:
+          - { entity: 'regions', label: 'Regions', icon: 'tag' }
+          - { entity: 'departments', label: 'Departements', icon: 'tag' }
+          - { entity: 'towns', label: 'Villes', icon: 'tag' }
+
+
+  formats:
+    datetime: 'd/m/Y à H:i'
+  entities:
+    # List the entity class name you want to manage
     user:
-        display_name: true
-    design:
-        form_theme:
-            - "@EasyAdmin/form/bootstrap_4.html.twig"
-        menu:
-            - { entity: 'user', label: 'Utilisateurs', icon: 'user' }
-            - label: 'Annonces'
-              icon: 'newspaper-o'
-              children:
-                  - { entity: 'Piecedetachee', label: 'Pieces détachées', icon: 'tag' }
-                  - { entity: 'moto', label: 'Motos', icon: 'tag' }
-            - label: 'Motos & Piéces'
-              icon: 'newspaper-o'
-              children:
-                  - { entity: 'categorie', label: 'Categories Moto', icon: 'tag' }
-                  - { entity: 'marque', label: 'Marques', icon: 'tag' }
-            - label: 'Forum'
-              icon: 'newspaper-o'
-              children:
-                  - { entity: 'articles', label: 'Articles forum', icon: 'tag' }
-                  - { entity: 'commentaires', label: 'Commentaires', icon: 'tag' }
-                  - { entity: 'mots_clé', label: 'Mots_clés', icon: 'tag' }
-                  - { entity: 'themes', label: 'Thèmes', icon: 'tag' }
-            - label : 'Geographie'
-              icon: 'newspaper-o'
-              children:
-                  - {entity: 'regions', label: 'Regions', icon: 'tag' }
-                  - {entity: 'departments', label: 'Departements', icon: 'tag' }
-                  - {entity: 'towns', label: 'Villes', icon: 'tag' }
+      class: App\Entity\User
+      label: 'Utilisateurs'
+      list:
+        fields:
+          - username
+          - email
+          - { property: 'validate_account', label: 'Compte validé', type: 'toggle' }
+          - { property: 'roles', label: 'Rôles', type: json_array }
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+      form:
+        fields:
+          - { property: 'username', 'label': "Nom d'utilisateur" }
+          - email
+          - { property: 'validate_account', label: 'Compte valide', type: 'checkbox' }
 
-
-    formats:
-        datetime: 'd/m/Y à H:i'
-    entities:
-        # List the entity class name you want to manage
-        user:
-            class: App\Entity\User
-            label: 'Utilisateurs'
-            list:
-                fields:
-                    - username
-                    - email
-                    - { property: 'validate_account', label: 'Compte validé', type: 'toggle'}
-                    - { property: 'roles', label: 'Rôles', type: json_array}
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-            form:
-                fields:
-                    - { property: 'username', 'label':"Nom d'utilisateur"}
-                    - email
-                    - { property: 'validate_account', label: 'Compte valide', type: 'checkbox'}
-
-                    - { property: 'roles', label: 'Rôles', type: choice, type_options: {expanded: true, multiple: true, choices: {'Utilisateur inscrit':'ROLE_USER', 'Utilisateur validé':'ROLE_SUBSCRIBER' ,'Administrateur':'ROLE_ADMIN','Super Admin':'ROLE_SUPERADMIN'}}}
-        marque:
-            class: App\Entity\Marque
-            label: 'Marque de motos et piéces détachées'
-            list:
-                fiels:
-                    - name
-                    - moto
-                    - piecedetachees
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        Piecedetachee:
-            class: App\Entity\Piecedetachee
-            list:
-                fields:
-                    - marque
-                    - model
-                    - { property: 'name', label: 'nom de la piéce'}
-                    - description
-                    - prix
-                    - vendeur
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        categorie:
-            class: App\Entity\Categorie
-            list:
-                fields:
-                    - name
-                    - motos
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        moto:
-            class: App\Entity\Moto
-            list:
-                fields:
-                    - marque
-                    - model
-                    - { property: 'year', label: 'Année', type: 'integer'}
-                    - cylindree
-                    - kilometrage
-                    - din
-                    - fisc
-                    - a2
-                    - categorie
-                    - prix
-                    - vendeur
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        articles:
-            class: App\Entity\Articles
-            list:
-                fields:
-                    - auteur
-                    - titre
-                    - contenu
-                    - created_at
-                    - theme
-                    - mots_cles
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        commentaires:
-            class: App\Entity\Commentaires
-            list:
-                fields:
-                    - auteur
-                    - contenu
-                    - actif
-                    - created_at
-                    - articles
-                    - {property: 'articles.auteur', label: "Auteur de l'article"}
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        mots_clé:
-            class: App\Entity\MotsCles
-            list:
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        themes:
-            class: App\Entity\Themes
-            list:
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary'}
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger'}
-        regions:
-            class: App\Entity\Regions
-            list:
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
-        departments:
-            class: App\Entity\Departments
-            list:
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
-        towns:
-            class: App\Entity\Towns
-            list:
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
-                    - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+          - { property: 'roles', label: 'Rôles', type: choice, type_options: { expanded: true, multiple: true, choices: { 'Utilisateur inscrit': 'ROLE_USER', 'Utilisateur validé': 'ROLE_SUBSCRIBER' ,'Administrateur': 'ROLE_ADMIN','Super Admin': 'ROLE_SUPERADMIN' } } }
+    marque:
+      class: App\Entity\Marque
+      label: 'Marque de motos et piéces détachées'
+      list:
+        fiels:
+          - name
+          - moto
+          - piecedetachees
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    Piecedetachee:
+      class: App\Entity\Piecedetachee
+      list:
+        fields:
+          - marque
+          - model
+          - { property: 'name', label: 'nom de la piéce' }
+          - description
+          - prix
+          - vendeur
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    categorie:
+      class: App\Entity\Categorie
+      list:
+        fields:
+          - name
+          - motos
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    moto:
+      class: App\Entity\Moto
+      list:
+        fields:
+          - marque
+          - model
+          - { property: 'year', label: 'Année', type: 'integer' }
+          - cylindree
+          - kilometrage
+          - din
+          - fisc
+          - a2
+          - categorie
+          - prix
+          - vendeur
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    articles:
+      class: App\Entity\Articles
+      list:
+        fields:
+          - auteur
+          - titre
+          - contenu
+          - created_at
+          - theme
+          - mots_cles
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    commentaires:
+      class: App\Entity\Commentaires
+      list:
+        fields:
+          - auteur
+          - contenu
+          - actif
+          - created_at
+          - articles
+          - { property: 'articles.auteur', label: "Auteur de l'article" }
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    mots_clé:
+      class: App\Entity\MotsCles
+      list:
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    themes:
+      class: App\Entity\Themes
+      list:
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    regions:
+      class: App\Entity\Regions
+      list:
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    departments:
+      class: App\Entity\Departments
+      list:
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }
+    towns:
+      class: App\Entity\Towns
+      list:
+        actions:
+          - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-primary' }
+          - { name: 'delete', icon: 'trash', label: false, css_class: 'btn btn-danger' }

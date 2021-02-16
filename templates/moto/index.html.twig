@@ -2,54 +2,65 @@
 
 {% block title %}Motos occasion{% endblock %}
 {% block body %}
-    <h1>Moto occasion</h1>
-    <div class="row">
-        {% for moto in motos %}
-            {% set vendeurOrAdmin = ((app.user == moto.vendeur) or (is_granted("ROLE_ADMIN"))) %}
-            <div class="col-md-6 col-lg-4 col-xl-3 ">
-                <div class="card mb-4">
-                    {% if moto.images is not empty %}
-                        <div>
-                            <img class="card-img img-moto"
-                                 src="{{ asset('/uploads/' ~ moto.images|first.name)| imagine_filter('thumb') }}"
-                                 alt="Image">
-                        </div>
-                    {% endif %}
-                    {% if moto.images is empty %}
-                        <div>
-                            <img class=""
-                                 src="{{ asset('/uploads/' ~ "defaultPicture.png") }}"
-                                 alt="image" height="100px">
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title text-center">
-                            {{ moto.marque.name }} - {{ moto.model }} - {{ moto.year }}
-                        </h5>
-                        <p class="card-text text-center">{{ moto.FormattedPrice }}</p>
-                        <p class="card-text">Vendeur : {{ moto.vendeur.username }} </p>
-                        <p class="card-text">Publiée le : {{ moto.createdAt|date("d/m/Y") }}
-                            à {{ moto.createdAt|date("H:i") }}</p>
-                        {% if is_granted("ROLE_SUBSCRIBER") %}
-                        <div class=" {{ vendeurOrAdmin ? " row " : " card-text " }} text-center">
-                            <a class="{{ vendeurOrAdmin ? " " : " text-center " }} card-text "
-                               href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce.</a>
-                            {% if vendeurOrAdmin %}
-                            <a class="col-6" href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier
-                                l'annonce</a>
-                        </div>
+    <div class="container">
+
+        <div class="text-center">
+            <h1>Moto occasion</h1>
+        </div>
+        <div class="row justify-content-center">
+
+            {% for moto in motos %}
+                {% set vendeurOrAdmin = ((app.user == moto.vendeur) or (is_granted("ROLE_ADMIN"))) %}
+                <div class="col-md-8 col-lg-6 col-xl-3 ">
+                    <div class="card mb-4">
+                        {% if moto.images is not empty %}
+                            <div>
+                                <img class="card-img img-moto"
+                                     src="{{ asset('/uploads/' ~ moto.images|first.name) }}"
+                                     alt="image">
+                            </div>
                         {% endif %}
-                    {% elseif is_granted("ROLE_SUBSCRIBER") == false %}
-                        <div class="card-text text-center">
-                            <a class="" href="{{ path('app_login') }}">Connecter</a>
-                        </div>
+                        {% if moto.images is empty %}
+                            <div>
+                                <img class="card-img img-moto"
+                                     src="{{ asset('/uploads/' ~ "defaultPicture.png") }}"
+                                     alt="image" height="100px">
+                            </div>
                         {% endif %}
+                        <div class="card-body d-flex-inline">
+                            <h5 class="card-title text-center font-weight-bold">
+                                {{ moto.marque.name }}
+                            </h5>
+                            <p class="card-text text-center ">{{ moto.model }}</p>
+                            <p class="card-text text-center ">{{ moto.kilometrage }} Km </p>
+                            <p class="card-text text-center">{{ moto.FormattedPrice }}</p>
+                            <p> Vendeur : {{ moto.vendeur.username }} </p>
+{#                            <p> Publiée le : {{ moto.createdAt|date("d/m/Y") }} <br> à {{ moto.createdAt|date("H:i") }}</p>#}
+                            <div class="container">
+                                {% if is_granted("ROLE_SUBSCRIBER") %}
+                                    <div class=" {{ vendeurOrAdmin ? " row " : " card-text " }} text-center">
+                                        <a class=" col-12 textneedco text-center "
+                                           href="{{ path('moto_show', {'id': moto.id}) }}">Voir l'annonce</a>
+                                        {% if vendeurOrAdmin %}
+                                            <a class="col-12 textneedco text-center card-text"
+                                               href="{{ path('moto_edit', {'id': moto.id}) }}">Modifier</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {# {% elseif is_granted("ROLE_SUBSCRIBER") == false %} #}
+                            {# <div class="row"> #}
+                            {# <a class="card-text text-center" href="{{ path('app_login') }}">Connecter</a> #}
+                            {# </div> #}
+                            {# {% endif %} #}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="navigation">
-        {{ knp_pagination_render(motos) }}
+            {% endfor %}
+        </div>
+        <div class="navigation">
+            {{ knp_pagination_render(motos) }}
+        </div>
     </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 @import "~bootstrap/scss/bootstrap";
 
-@media screen and (min-width: 400px) and (max-width: 770px) {
+@media screen and (min-width: 300px) and (max-width: 770px) {
   .img-moto {
     display: none;
   }
@@ -12,6 +12,7 @@
 body {
   background-color: #AAAAAA;
   font-size: 1.5rem;
+  max-width: available;
 }
 img {
   height: auto;
@@ -64,7 +65,7 @@ img {
 }
 
 .card-title {
-  font-size: 2.5em;
+  font-size: 2rem;
 }
 
 .card-text {
@@ -72,7 +73,7 @@ img {
 }
 
 .img-moto {
-  height: auto;
+  height: 180px;
 }
 
 .column {
@@ -168,7 +169,7 @@ a {
 }
 
 .textneedco {
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 table {

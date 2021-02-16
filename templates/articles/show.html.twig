@@ -18,7 +18,7 @@
         </tr>
         <tr>
             <th>Sujet crée le</th>
-            <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ article.createdAt ? article.createdAt|date('d-m-Y') : '' }}  à  {{ article.createdAt ? article.createdAt|date('H:i') : '' }}</td>
         </tr>
         <tr>
             {# {% if (article.commentaires.count > 0) %} #}
@@ -58,14 +58,14 @@
         {% endif %}
     </div>
 
-    {% if is_granted('ROLE_SUBSCRIBER') %}
+{#    {% if is_granted('ROLE_SUBSCRIBER') %}#}
         <div>
             <a href="{{ path('commentaires_new',{'article': article.id, article: article.id}) }}">Participer à la
                 conversation</a>
         </div>
     {% else %}
         <div>
-            <a href="{{ path('app_login') }}">Vous devez vous connecter pour pouvoir participer à la conversation</a>
+            <a href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir participer à la conversation</a>
         </div>
     {% endif %}
     <a href="{{ path('articles_index') }}">Retour à la liste des articles</a>

@@ -11,5 +11,4 @@ $(function () {
     hideOrSeeInfos($('#piecesenventes'),$('#annoncespieces'));
     hideOrSeeInfos($('#sujetouverts'),$('#sujet'));
     hideOrSeeInfos($('#commentaireposte'),$('#commentairesBlock'));
-
 });

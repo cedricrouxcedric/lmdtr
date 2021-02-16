@@ -7,49 +7,54 @@
         <div class="text-center">
             <h1>Piéces d'étachées occasions</h1>
         </div>
-    <div class="row justify-content-center">
+        <div class="row justify-content-center">
 
-        {% for piece in piecedetachees %}
-            {% set vendeur = ((app.user == piece.vendeur) or (is_granted("ROLE_ADMIN"))) %}
-            <div class="col-md-8 col-lg-6 col-xl-3 ">
-                <div class="card mb-4">
-                    {% if piece.images is not empty %}
-                        <div>
-                            <img class="card-img img-moto"
-                                 src="{{ asset('/uploads/' ~ piece.images|first.name)}}"
-                                 alt="Image">
-                        </div>
-                    {% endif %}
-                    {% if piece.images is empty %}
-                        <div>
-                            <img class="card-img img-moto"
-                                 src="{{ asset('/uploads/' ~ "defaultPicture.png") }}"
-                                 alt="image" height="100px">
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title text-center">
-                            {{ piece.marque.name }} - {{ piece.model }}
-                        </h5>
-                        <p class="card-text text-center">{{ piece.FormattedPrice }}</p>
-                        <p>Vendeur : {{ piece.vendeur.username }} </p>
-                        <p>Publiée le : {{ piece.createdAt|date("d/m/Y") }} à {{ piece.createdAt|date("H:i") }}</p>
-
-                        <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
-                            <a class="{{ vendeur ? " " : "card-text text-center " }}col-6 "
-                               href="{{ path('piecedetachee_show', {'id': piece.id}) }}">Voir l'annonce.</a>
-                            {% if vendeur %}
-                                <a class="col-6" href="{{ path('piecedetachee_edit', {'id': piece.id}) }}">Modifier
-                                    l'annonce</a>
-                            {% endif %}
+            {% for piece in piecedetachees %}
+                {% set vendeur = ((app.user == piece.vendeur) or (is_granted("ROLE_ADMIN"))) %}
+                <div class="col-md-8 col-lg-6 col-xl-3 ">
+                    <div class="card mb-4">
+                        {% if piece.images is not empty %}
+                            <div>
+                                <img class="card-img img-moto"
+                                     src="{{ asset('/uploads/' ~ piece.images|first.name) }}"
+                                     alt="Image">
+                            </div>
+                        {% endif %}
+                        {% if piece.images is empty %}
+                            <div>
+                                <img class="card-img img-moto"
+                                     src="{{ asset('/uploads/' ~ "defaultPicture.png") }}"
+                                     alt="image" height="100px">
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex-inline">
+                            <h5 class="card-title text-center font-weight-bold">
+                                {{ piece.marque.name }}
+                            </h5>
+                            <h5 class="card-title text-center ">
+                                 {{ piece.model }}
+                            </h5>
+                            <p class="card-text text-center">{{ piece.FormattedPrice }}</p>
+                            <p>Vendeur : {{ piece.vendeur.username }} </p>
+                            <p>Publiée le : {{ piece.createdAt|date("d/m/Y") }} à {{ piece.createdAt|date("H:i") }}</p>
+                            <div class="container">
+                            <div class=" {{ vendeur ? " row " : " card-text " }}    text-center">
+                                <a class="row textneedco text-center col-12"
+                                   href="{{ path('piecedetachee_show', {'id': piece.id}) }}">Voir l'annonce.</a>
+                                {% if vendeur %}
+                                    <a class="row textneedco text-center col-12"
+                                       href="{{ path('piecedetachee_edit', {'id': piece.id}) }}">
+                                        Modifier</a>
+                                {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="navigation">
-        {{ knp_pagination_render(piecedetachees) }}
-    </div>
+            {% endfor %}
+        </div>
+        <div class="navigation">
+            {{ knp_pagination_render(piecedetachees) }}
+        </div>
     </div>
 {% endblock %}

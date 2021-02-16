@@ -34,7 +34,7 @@ class CommentairesController extends AbstractController
      */
     public function new(Request $request, ArticlesRepository $articlesRepository, UserInterface $user): Response
     {
-
+        dump($user->getRoles());
         $article = $articlesRepository->find($request->attributes->get('article'));
 
 

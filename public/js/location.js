@@ -1,5 +1,4 @@
 $(document).on('change', '#location_departement', function () {
-    let $field = $(this)
     let $departementfield = $('#location_departement')
     let $townfield = $('#location_town')
     let data = {}
@@ -17,6 +16,5 @@ $(document).on('change', '#location_departement', function () {
             $townfield.append($("<option></option>")
                 .attr(value).text(response.data[key].name));
         })
-        $townfield.prepend($("<option></option>").text("choisir ville !!!!"))
     });
 })

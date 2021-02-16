@@ -9,18 +9,15 @@ use App\Form\RegistrationType;
 use App\Form\ResetPassType;
 use App\Form\ValidationCodeType;
 use App\Repository\MotoRepository;
-use App\Repository\TownsRepository;
 use App\Repository\PiecedetacheeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use LogicException;
-use MongoDB\Driver\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -37,6 +34,10 @@ class SecurityController extends AbstractController
      * @var UserRepository
      */
     private $repository;
+    /**
+     * @var UserRepository
+     */
+    private $UserRepository;
 
     /**
      * SecurityController constructor.
@@ -46,12 +47,12 @@ class SecurityController extends AbstractController
     public function __construct(UserRepository $repository)
     {
         $this->UserRepository = $repository;
-
     }
-
 
     /**
      * @Route("/login", name="app_login")
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -165,9 +166,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/activationmoto/{token}",name="activation_moto")
      */
-
      public function activationMoto($token,
-                                    MotoRepository $motoRepository)
+                                    MotoRepository $motoRepository): RedirectResponse
      {
          $moto = $motoRepository->findOneBy(['confirmation_code'=> $token]);
          if (!$moto) {
@@ -186,7 +186,6 @@ class SecurityController extends AbstractController
     /**
      * @Route("/activationpiece/{token}", name="activation_piece")
      */
-
     public function activationPiece($token,
                                     PiecedetacheeRepository $piecedetacheeRepository)
     {

@@ -11,8 +11,6 @@ use App\Repository\MotoRepository;
 use App\Entity\MotoLike;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
-use phpDocumentor\Reflection\Types\Null_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,13 +22,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class MotoController extends AbstractController
 {
-
-
-    /**
-     * @var MotoRepository
-     */
-    private $repository;
-
     /**
      * @var MotoRepository
      */
@@ -47,7 +38,7 @@ class MotoController extends AbstractController
 
     }
 
-    private function checkExt($repo)
+    private function checkExt($repo): bool
     {
         $allowedExt = ["jpeg", "jpg", "png"];
         $result = true;
@@ -78,6 +69,9 @@ class MotoController extends AbstractController
 
     /**
      * @Route("/moto", name="moto_index", methods={"GET"})
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return Response
      */
     public function index(Request $request,
                           PaginatorInterface $paginator): Response
@@ -86,7 +80,7 @@ class MotoController extends AbstractController
         $motos = $paginator->paginate(
             $motosAll,
             $request->query->getInt('page', 1),
-            6
+            8
         );
         return $this->render('moto/index.html.twig', [
             'motos' => $motos,
@@ -307,13 +301,13 @@ class MotoController extends AbstractController
         $lng1 *= $pi80;
         $lat2 *= $pi80;
         $lng2 *= $pi80;
-        $r = 6372.797; // rayon moyen de la Terre en km
+        $heartRadius = 6372.797;
         $dlat = $lat2 - $lat1;
         $dlng = $lng2 - $lng1;
         $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin(
                 $dlng / 2) * sin($dlng / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        $km = $r * $c;
+        $km = $heartRadius * $c;
         return (round($km));
     }
 }
