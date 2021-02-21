@@ -5,7 +5,7 @@ $(function () {
         // affichage ou non du gif coeur
         $('#heart').toggle();
         //changement du text du boutton
-        $("button.favorite").text($('#heart').attr('style') === "display: none;" ? "Ajouter aux favoris" : "Retirer des favoris");
+        $("button.favorite").text($('#heart').is(':hidden') ? "Ajouter aux favoris" : "Retirer des favoris");
             // Suppresion de la redirection vers le href du lien
             e.preventDefault();
             const url = this.href;

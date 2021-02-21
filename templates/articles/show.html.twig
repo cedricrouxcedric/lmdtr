@@ -3,11 +3,11 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
+
     <h1>{{ article.themes.name }} / {{ article.titre }}</h1>
 
     <table class="table">
         <tbody>
-
         <tr>
             <th>Contenu</th>
             <td>{{ article.contenu }}</td>
@@ -18,7 +18,8 @@
         </tr>
         <tr>
             <th>Sujet crée le</th>
-            <td>{{ article.createdAt ? article.createdAt|date('d-m-Y') : '' }}  à  {{ article.createdAt ? article.createdAt|date('H:i') : '' }}</td>
+            <td>{{ article.createdAt ? article.createdAt|date('d-m-Y') : '' }}
+                à {{ article.createdAt ? article.createdAt|date('H:i') : '' }}</td>
         </tr>
         <tr>
             {# {% if (article.commentaires.count > 0) %} #}
@@ -35,37 +36,38 @@
         <h2>Commentaires</h2>
 
         {% if (article.commentaires.count > 0) %}
-{#            <div class="row">#}
-{#                {{ dump(article.commentaires) }}#}
-{#                {% for commmentaire in article.commentaires|sort((a,b)=> a.createdAt <=> b.createdAt) %}#}
+            {# <div class="row"> #}
+            {# {{ dump(article.commentaires) }} #}
+            {# {% for commmentaire in article.commentaires|sort((a,b)=> a.createdAt <=> b.createdAt) %} #}
 
-{#                        <div class="card col-12 m-3" style="width: 18rem;">#}
-{#                            <div class="card-header">#}
-{#                                {{ commmentaire.auteur }} dit :#}
-{#                            </div>#}
-{#                            <ul class="list-group list-group-flush">#}
-{#                                <li class="list-group-item">{{ commmentaire.contenu }}</li>#}
-{#                            </ul>#}
-{#                            <div class="card-footer">#}
-{#                                {{ commmentaire.createdAt|date('Y-m-d H:i:s') }}#}
-{#                            </div>#}
-{#                        </div>#}
+            {# <div class="card col-12 m-3" style="width: 18rem;"> #}
+            {# <div class="card-header"> #}
+            {# {{ commmentaire.auteur }} dit : #}
+            {# </div> #}
+            {# <ul class="list-group list-group-flush"> #}
+            {# <li class="list-group-item">{{ commmentaire.contenu }}</li> #}
+            {# </ul> #}
+            {# <div class="card-footer"> #}
+            {# {{ commmentaire.createdAt|date('Y-m-d H:i:s') }} #}
+            {# </div> #}
+            {# </div> #}
 
 
-{#                {% endfor %}#}
-                {{ include('articles/articleComments.html.twig') }}
-            </div>
+            {# {% endfor %} #}
+            {{ include('articles/articleComments.html.twig') }}
+            {# </div> #}
         {% endif %}
-    </div>
 
-{#    {% if is_granted('ROLE_SUBSCRIBER') %}#}
+
+    {% if is_granted('ROLE_SUBSCRIBER') %}
         <div>
             <a href="{{ path('commentaires_new',{'article': article.id, article: article.id}) }}">Participer à la
                 conversation</a>
         </div>
     {% else %}
         <div>
-            <a href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir participer à la conversation</a>
+            <a href="{{ path('app_login') }}">Vous devez vous connecter avec un compte validé pour pouvoir participer à
+                la conversation</a>
         </div>
     {% endif %}
     <a href="{{ path('articles_index') }}">Retour à la liste des articles</a>
@@ -76,4 +78,5 @@
         </div>
         {{ include('articles/_delete_form.html.twig') }}
     {% endif %}
+    </div>
 {% endblock %}

@@ -1,67 +1,66 @@
-<div class="container-fluid">
-    <nav class=" navbar navbar-expand-lg bg-dark navbar-dark">
-        <a class="navbar-brand accueil mr-4"
-           href="{{ path('lmdtr_index') }}">
-            Accueil
-        </a>
-        <button class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
-            <ul class="navbar-nav">
+<nav class=" navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+    <a class="navbar-brand accueil mr-4"
+       href="{{ path('lmdtr_index') }}">
+        Accueil
+    </a>
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse"
+         id="navbarNav">
+        <ul class="navbar-nav">
+            <li>
+                <div class="container">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle grey px-0 m-2" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Consulte les annonces
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item grey" href="{{ path('moto_index') }}">Motos</a>
+                            <a class="dropdown-item grey" href="{{ path('piecedetachee_index') }}">Piéces
+                                détachées</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% if  is_granted("ROLE_SUBSCRIBER") %}
                 <li>
                     <div class="container">
                         <div class="dropdown">
                             <button class="btn dropdown-toggle grey px-0 m-2" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Consulte les annonces
+                                Depose une annonce
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item grey" href="{{ path('moto_index') }}">Motos</a>
-                                <a class="dropdown-item grey" href="{{ path('piecedetachee_index') }}">Piéces
+                                <a class="dropdown-item grey" href="{{ path('moto_new') }}">Motos</a>
+                                <a class="dropdown-item grey" href="{{ path('piecedetachee_new') }}">Piéces
                                     détachées</a>
                             </div>
                         </div>
                     </div>
                 </li>
-                {% if  is_granted("ROLE_SUBSCRIBER") %}
-                    <li>
-                        <div class="container">
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle grey px-0 m-2" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Depose une annonce
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item grey" href="{{ path('moto_new') }}">Motos</a>
-                                    <a class="dropdown-item grey" href="{{ path('piecedetachee_new') }}">Piéces
-                                        détachées</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="{{ path('themes_index') }}">
-                        Forum
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="{{ path('contact') }}">
-                        Contact nous
-                    </a>
-                </li>
-                <div class="row connection">
-                    {% if  is_granted("ROLE_SUPERADMIN") %}
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{{ path('themes_index') }}">
+                    Forum
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{{ path('contact') }}">
+                    Contact nous
+                </a>
+            </li>
+            <div class="row connection">
+                {% if  is_granted("ROLE_SUPERADMIN") %}
                     <li class="nav-item mr-2">
                         <a href="/superadmin"
                            target="_blank"
@@ -69,8 +68,8 @@
                             Gestion
                         </a>
                     </li>
-                        {% endif %}
-                        {% if not app.user %}
+                {% endif %}
+                {% if not app.user %}
                     <li class="nav-item mr-2">
                         <a href="{{ path('app_login') }}"
                            class="nav-link">
@@ -83,21 +82,20 @@
                             S'inscrire
                         </a>
                     </li>
-                    {% endif %}
-                    {% if app.user %}
-                        <li class="nav-item mr-2">
-                            <a href="{{ path('app_logout') }}"
-                               class="nav-link">
-                                Déconnexion
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('user_show', {'id': app.user.id}) }}">
-                                <p class="nav-link">  {{ app.user.username }}</p></a>
-                        </li>
-                    {% endif %}
-                </div>
-            </ul>
-        </div>
-    </nav>
-</div>
+                {% endif %}
+                {% if app.user %}
+                    <li class="nav-item mr-2">
+                        <a href="{{ path('app_logout') }}"
+                           class="nav-link">
+                            Déconnexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('user_show', {'id': app.user.id}) }}">
+                            <p class="nav-link">  {{ app.user.username }}</p></a>
+                    </li>
+                {% endif %}
+            </div>
+        </ul>
+    </div>
+</nav>

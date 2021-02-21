@@ -7,37 +7,38 @@
         {{ encore_entry_link_tags('app') }}
         <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet"/>
     {% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/moto.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/moto.ico') }}"/>
 </head>
+<body>
 {% include 'navbar.html.twig' %}
-    <body class="container">
+<div class="container">
+    <div class="here">
 
-        <div class="here">
+        {% if not is_granted("ROLE_SUBSCRIBER") %}
+            <h3 class="text-center text-danger">Pour profiter pleinement de votre site veuillez valider votre compte
+                !</h3>
+        {% endif %}
+    </div>
 
-            {% if not is_granted("ROLE_SUBSCRIBER") %}
-                <h3 class="text-center text-danger">Pour profiter pleinement de votre site veuillez valider votre compte !</h3>
-            {% endif %}</div>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            {% endfor %}
+    {% block body %}
+    {% endblock %}
 
-        {% block body %}
-
-        {% endblock %}
-
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        {% endblock %}
-
-    </body>
+</div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+{% endblock %}
+</body>
 
 </html>

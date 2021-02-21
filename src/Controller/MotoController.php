@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Entity\Moto;
 use App\Entity\User;
 use App\Form\MotoType;
+use App\Form\SearchFormType;
 use App\Repository\MotoLikeRepository;
 use App\Repository\MotoRepository;
 use App\Entity\MotoLike;
@@ -68,7 +69,7 @@ class MotoController extends AbstractController
     }
 
     /**
-     * @Route("/moto", name="moto_index", methods={"GET"})
+     * @Route("/moto", name="moto_index")
      * @param Request $request
      * @param PaginatorInterface $paginator
      * @return Response
@@ -76,7 +77,13 @@ class MotoController extends AbstractController
     public function index(Request $request,
                           PaginatorInterface $paginator): Response
     {
-        $motosAll = $this->MotoRepository->findAll();
+        $searchForm = $this->createForm(SearchFormType::class);
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $motosAll = $this->MotoRepository->findBySearch($searchForm->getData());
+        } else {
+            $motosAll = $this->MotoRepository->findAll();
+        }
         $motos = $paginator->paginate(
             $motosAll,
             $request->query->getInt('page', 1),
@@ -84,6 +91,7 @@ class MotoController extends AbstractController
         );
         return $this->render('moto/index.html.twig', [
             'motos' => $motos,
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 
@@ -301,13 +309,13 @@ class MotoController extends AbstractController
         $lng1 *= $pi80;
         $lat2 *= $pi80;
         $lng2 *= $pi80;
-        $heartRadius = 6372.797;
+        $earthRadius = 6372.797;
         $dlat = $lat2 - $lat1;
         $dlng = $lng2 - $lng1;
         $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin(
                 $dlng / 2) * sin($dlng / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        $km = $heartRadius * $c;
+        $km = $earthRadius * $c;
         return (round($km));
     }
 }

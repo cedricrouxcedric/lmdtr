@@ -3,9 +3,24 @@
 {% block title %}Motos occasion{% endblock %}
 {% block body %}
     <div class="container">
-
         <div class="text-center">
             <h1>Moto occasion</h1>
+        </div>
+        <div class="container-fluid m-4">
+            <div class="form-group">
+                {{ form_start(searchForm) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(searchForm.prixMin, {'label': 'Prix Mini', 'attr' : {'placeholder': 'Prix Mini'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(searchForm.prixMax, {'label': 'Prix Maxi', 'attr' : {'placeholder': 'Prix Maxi'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(searchForm.marque, {'label': 'Marque','attr' : {'placeholder': 'Marque'} }) }}
+            </div>
+            <button class="btn btn-primary ml-3 mt-2">Chercher</button>
+            {{ form_end(searchForm) }}
         </div>
         <div class="row justify-content-center">
 

@@ -20,7 +20,7 @@ class MotoRepository extends ServiceEntityRepository
         parent::__construct($registry, Moto::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy(array('validate'=>1), array('created_at' => 'DESC'));
     }
@@ -68,22 +68,26 @@ class MotoRepository extends ServiceEntityRepository
             ->execute();
         return $queryBuilder;
     }
-    // /**
-    //  * @return Moto[] Returns an array of Moto objects
-    //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findBySearch($data)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('m');
+        if (isset($data['prixMin'])) {
+            $qb->andWhere('m.prix >= :prixMin')
+                ->setParameter('prixMin', $data['prixMin']);
+        }
+        if (isset($data['prixMax'])) {
+            $qb->andWhere('m.prix <= :prixMax')
+                ->setParameter('prixMax', $data['prixMax']);
+        }
+        if (isset($data['marque'])) {
+            $qb->andWhere('m.marque = :marque')
+                ->setParameter('marque', $data['marque']);
+        }
+        $qb->orderBy('m.created_at','DESC');
+        return $qb->getQuery()
+            ->execute();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Moto
